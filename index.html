@@ -14,34 +14,34 @@
   <div class="main-wrapper">
     <article class="outcome">
       <h1>Расходы</h1>
-      <article class="outcome-diagram">
-
-      </article>
+      <button class="outcome__add" id="addForm">Добавить расходы</button>
+      <form action="" class="outcome-form invisible">
+        <input type="number">
+        <input type="radio" value="food" name="outcome-catergory">
+        <label for="food">Еда</label>
+        <input type="radio" value="clothers" name="outcome-catergory">
+        <label for="clothers">Одежда</label>
+        <input type="radio" value="transport" name="outcome-catergory">
+        <label for="transport">Транспорт</label>
+        <button class="outome-form__add" id="addValue">Добавить</button>
+      </form>
       <section class="categories">
-        <div class="categories-item" id="food">
-          <span class="categories-item__key">Еда</span>
-          <span class="categories-item__value">21569</span>
+        <div class="categories-item">
+          <p class="categories-item__key">Еда</p>
+          <p class="categories-item__value">0</p>
+        </div>
+        <div class="categories-item">
+          <p class="categories-item__key">Одежда</p>
+          <p class="categories-item__value">0</p>
+        </div>
+        <div class="categories-item">
+          <p class="categories-item__key">Транспорт</p>
+          <p class="categories-item__value">0</p>
         </div>
         
-        <div class="categories-item" id="transport">
-          <span class="categories-item__key">Транспорт</span>
-          <span class="categories-item__value">34000</span>
-        </div>
-        <div class="categories-item" id="health">
-          <span class="categories-item__key">Здоровье</span>
-          <span class="categories-item__value">5210</span>
-        </div>
-        <div class="categories-item" id="home">
-          <span class="categories-item__key">Дом</span>
-          <span class="categories-item__value">8754</span>
-        </div>
-        <div class="categories-item" >
-          <span class="categories-item__key">Всего</span>
-          <span class="categories-item__value" id="sum"></span>
-        </div>
       </section>
     </article>
-    <article class="income">
+    <!-- <article class="income">
       <h1>Доходы</h1>
       <section class="categories">
         <div class="categories-item" id="salary">
@@ -61,7 +61,7 @@
           <span class="categories-item__value">15200</span>
         </div>
       </section>
-    </article>
+    </article> -->
     <script src="script.js"></script>
   </div>
 </body>

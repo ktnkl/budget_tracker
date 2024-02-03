@@ -8,11 +8,11 @@
   justify-content: space-around;
 }
 
-.outcome {
-  
+.invisible {
+  display: none;
 }
 
-.categories {
+/* .categories {
   display: flex;
   flex-wrap: wrap;
   justify-content: space-between;
@@ -133,4 +133,4 @@
   background-color: coral;
   width: 16px;
   height: 16px;
-}
+} */

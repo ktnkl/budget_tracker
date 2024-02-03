@@ -9,23 +9,32 @@ function getSum() {
 
 }
 
-const stylesheet = document.styleSheets[0];
-const newRule = [...stylesheet.cssRules].find(
-  (r) => r.selectorText === ".outcome",
-);
-newRule.style.setProperty('--food', 'orangered')
+const addForm = document.getElementById('addForm');
+const addValue = document.getElementById('addValue');
+const outcomeForm = document.querySelector(".outcome-form");
+addForm.addEventListener('click', () => {
+  console.log('click')
+  addForm.classList.toggle('invisible');
+  outcomeForm.classList.toggle('invisible')
+})
 
-newRule.style.setProperty('--transport', 'blue')
-getSum()
+// const stylesheet = document.styleSheets[0];
+// const newRule = [...stylesheet.cssRules].find(
+//   (r) => r.selectorText === ".outcome",
+// );
+// newRule.style.setProperty('--food', 'orangered')
 
-let sum = document.getElementById('sum').innerHTML
-console.log(sum)
-let foodPercent = document.querySelector('#food .categories-item__value').innerHTML * 360 / sum;
-let transportPercent = document.querySelector('#transport .categories-item__value').innerHTML * 360 / sum;
-let healthPercent = document.querySelector('#health .categories-item__value').innerHTML * 360 / sum;
-let homePercent = document.querySelector('#home .categories-item__value').innerHTML * 360 / sum;
+// newRule.style.setProperty('--transport', 'blue')
+// getSum()
 
-newRule.style.setProperty('--foodPercent', foodPercent + 'deg');
-newRule.style.setProperty('--transportPercent', transportPercent + 'deg');
-newRule.style.setProperty('--healthPercent', healthPercent + 'deg');
-newRule.style.setProperty('--homePercent', homePercent + 'deg');
+// let sum = document.getElementById('sum').innerHTML
+// console.log(sum)
+// let foodPercent = document.querySelector('#food .categories-item__value').innerHTML * 360 / sum;
+// let transportPercent = document.querySelector('#transport .categories-item__value').innerHTML * 360 / sum;
+// let healthPercent = document.querySelector('#health .categories-item__value').innerHTML * 360 / sum;
+// let homePercent = document.querySelector('#home .categories-item__value').innerHTML * 360 / sum;
+
+// newRule.style.setProperty('--foodPercent', foodPercent + 'deg');
+// newRule.style.setProperty('--transportPercent', transportPercent + 'deg');
+// newRule.style.setProperty('--healthPercent', healthPercent + 'deg');
+// newRule.style.setProperty('--homePercent', homePercent + 'deg');
