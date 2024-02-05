@@ -1,22 +1,84 @@
-function getSum() {
-  let sum = 0;
-  let elements = document.querySelectorAll('.outcome .categories-item__value')
-  elements.forEach((Element) => {
-    console.log(Element.innerHTML)
-    sum = sum + Number(Element.innerHTML)
-  })
-  document.getElementById('sum').innerHTML = sum
+/// Model
 
+const defaultState = {
+  income: [], // { id: 1, categoryId: 1, value: 100, date: new Date() }
+  outcome: [], // { id: 2, categoryId: 2, value: 100, date: new Date() }
+  category: [] // { id: 1, name: 'Развлечения' }
 }
 
-const addForm = document.getElementById('addForm');
-const addValue = document.getElementById('addValue');
-const outcomeForm = document.querySelector(".outcome-form");
-addForm.addEventListener('click', () => {
-  console.log('click')
-  addForm.classList.toggle('invisible');
-  outcomeForm.classList.toggle('invisible')
-})
+let savedState = localStorage.getItem('state')
+
+let state = savedState ? JSON.parse(savedState) : defaultState
+
+let resetState = () => {
+  state = defaultState
+}
+
+let saveState = () => {
+  localStorage.setItem('state', JSON.stringify(state))
+}
+
+/// View-Model
+
+let addCategory = (categoryId) => {
+  let inputId
+  switch (categoryId) {
+    case 1:
+      inputId = 'add-income-category-name'
+      break;
+    case 2:
+      inputId = 'add-outcome-category-name'
+    default:
+      break;
+  }
+  name = document.getElementById('add-income-category-name').value
+  state.category.push({ categoryId, name })
+  document.getElementById('add-income-category-name').value = '' // обнуляем инпут
+  render('outcome-form', state.category, 'categoryInput')
+}
+
+let removeCategory = (categoryId) => {
+  state.category.filter((item) => item.id !== categoryId)
+  render()
+}
+
+const defaultCategoryType = [{ categoryId: 1, name: 'Доходы' }, { categoryId: 2, name: 'Расходы' }]
+
+render = (elementId, model, blockType) => {
+  let element = document.getElementById(elementId)
+  model.forEach((item, index) => {
+    element.insertAdjacentHTML('beforeend', blockType === 'categoryInput' ? categoryInput('category' + index, item.name) : null)
+  })
+  saveState()
+}
+
+/// Components
+
+let categoryInput = (value, name) => {
+  return `<input type="radio" value="${value}" name="outcome-catergory">
+   <label for="${value}">${name}</label>`
+}
+
+render('outcome-form', state.category, 'categoryInput')
+
+// function getSum() {
+//   let sum = 0;
+//   let elements = document.querySelectorAll('.outcome .categories-item__value')
+//   elements.forEach((Element) => {
+//     console.log(Element.innerHTML)
+//     sum = sum + Number(Element.innerHTML)
+//   })
+//   document.getElementById('sum').innerHTML = sum
+// }
+
+// const addForm = document.getElementById('addForm');
+// const addValue = document.getElementById('addValue');
+// const outcomeForm = document.querySelector(".outcome-form");
+// addForm.addEventListener('click', () => {
+//   console.log('click')
+//   addForm.classList.toggle('invisible');
+//   outcomeForm.classList.toggle('invisible')
+// })
 
 // const stylesheet = document.styleSheets[0];
 // const newRule = [...stylesheet.cssRules].find(

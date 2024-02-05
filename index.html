@@ -14,18 +14,12 @@
   <div class="main-wrapper">
     <article class="outcome">
       <h1>Расходы</h1>
-      <button class="outcome__add" id="addForm">Добавить расходы</button>
-      <form action="" class="outcome-form invisible">
+      <form action="" class="outcome-form" id="outcome-form">
         <input type="number">
-        <input type="radio" value="food" name="outcome-catergory">
-        <label for="food">Еда</label>
-        <input type="radio" value="clothers" name="outcome-catergory">
-        <label for="clothers">Одежда</label>
-        <input type="radio" value="transport" name="outcome-catergory">
-        <label for="transport">Транспорт</label>
-        <button class="outome-form__add" id="addValue">Добавить</button>
+        <!-- тут будут отображаться категории -->
       </form>
-      <section class="categories">
+      <button class="outome-form__add" id="add-outcome">Добавить расходы</button>
+      <section class="categories" id="categories-income-list">
         <div class="categories-item">
           <p class="categories-item__key">Еда</p>
           <p class="categories-item__value">0</p>
@@ -38,10 +32,12 @@
           <p class="categories-item__key">Транспорт</p>
           <p class="categories-item__value">0</p>
         </div>
-        
       </section>
+      <input type="text" placeholder="Введите название..." id="add-income-category-name">
+      <button class="outcome__add" id="add-income-category" onclick="addCategory(1)">Добавить категорию
+        расходов</button>
     </article>
-    <!-- <article class="income">
+    <article class="income">
       <h1>Доходы</h1>
       <section class="categories">
         <div class="categories-item" id="salary">
@@ -61,8 +57,10 @@
           <span class="categories-item__value">15200</span>
         </div>
       </section>
-    </article> -->
+      <button class="outcome__add" id="add-category" onclick="addCategory(2)">Добавить категорию доходов</button>
+    </article>
     <script src="script.js"></script>
   </div>
 </body>
+
 </html>
