@@ -1,0 +1,12 @@
+{
+  "name": "budget_tracker",
+  "version": "1.0.0",
+  "description": "",
+  "main": "script.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "serve": "parcel ./src/index.html -p 4200 --open"
+  },
+  "author": "Alexey <pankov.kek@gmail.com>",
+  "license": "ISC"
+}

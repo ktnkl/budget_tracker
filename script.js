@@ -1,9 +1,9 @@
 /// Model
 
 const defaultState = {
-  income: [], // { id: 1, categoryId: 1, value: 100, date: new Date() }
-  outcome: [], // { id: 2, categoryId: 2, value: 100, date: new Date() }
-  category: [] // { id: 1, name: 'Развлечения' }
+  income: [], // { id: 1, categoryId: 1, value: 100}
+  outcome: [], // { id: 2, categoryId: 2, value: 100 }
+  category: [] // { categoryId: 1, name: 'Развлечения' }
 }
 
 let savedState = localStorage.getItem('state')
@@ -12,6 +12,8 @@ let state = savedState ? JSON.parse(savedState) : defaultState
 
 let resetState = () => {
   state = defaultState
+  localStorage.clear()
+  location.reload()
 }
 
 let saveState = () => {
@@ -31,15 +33,30 @@ let addCategory = (categoryId) => {
     default:
       break;
   }
-  name = document.getElementById('add-income-category-name').value
+  name = document.getElementById(inputId).value
   state.category.push({ categoryId, name })
-  document.getElementById('add-income-category-name').value = '' // обнуляем инпут
+  document.getElementById(inputId).value = '' // обнуляем инпут
   render('outcome-form', state.category, 'categoryInput')
 }
 
 let removeCategory = (categoryId) => {
   state.category.filter((item) => item.id !== categoryId)
   render()
+}
+
+let addCategoryValue = (categoryId) => {
+  let inputId
+  switch (categoryId) {
+    case 1:
+      inputId = 'add-income'
+      break;
+    case 2:
+      inputId = 'add-outcome'
+    default:
+      break;
+  }
+  const value = document.getElementById(inputId).value
+  
 }
 
 const defaultCategoryType = [{ categoryId: 1, name: 'Доходы' }, { categoryId: 2, name: 'Расходы' }]

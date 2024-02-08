@@ -16,26 +16,20 @@
       <h1>Расходы</h1>
       <form action="" class="outcome-form" id="outcome-form">
         <input type="number">
+        <button class="outome-form__add" id="add-outcome">Добавить расходы</button>
         <!-- тут будут отображаться категории -->
-      </form>
-      <button class="outome-form__add" id="add-outcome">Добавить расходы</button>
+    </form>
       <section class="categories" id="categories-income-list">
         <div class="categories-item">
           <p class="categories-item__key">Еда</p>
           <p class="categories-item__value">0</p>
         </div>
-        <div class="categories-item">
-          <p class="categories-item__key">Одежда</p>
-          <p class="categories-item__value">0</p>
-        </div>
-        <div class="categories-item">
-          <p class="categories-item__key">Транспорт</p>
-          <p class="categories-item__value">0</p>
-        </div>
+        
       </section>
       <input type="text" placeholder="Введите название..." id="add-income-category-name">
-      <button class="outcome__add" id="add-income-category" onclick="addCategory(1)">Добавить категорию
+      <button class="outcome__add" id="add-outcome-category" onclick="addCategory(2)">Добавить категорию
         расходов</button>
+      <button class="outcome__reset" onclick="resetState()">Сбросить состояние</button>
     </article>
     <article class="income">
       <h1>Доходы</h1>
@@ -57,7 +51,7 @@
           <span class="categories-item__value">15200</span>
         </div>
       </section>
-      <button class="outcome__add" id="add-category" onclick="addCategory(2)">Добавить категорию доходов</button>
+      <button class="outcome__add" id="add-category" onclick="addCategory(1)">Добавить категорию доходов</button>
     </article>
     <script src="script.js"></script>
   </div>
