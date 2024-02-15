@@ -1,9 +1,10 @@
 /// Model
 
 const defaultState = {
-  income: [], // { id: 1, categoryId: 1, value: 100}
-  outcome: [], // { id: 2, categoryId: 2, value: 100 }
-  category: [] // { categoryId: 1, name: 'Развлечения' }
+  income: [], // { categoryId: 1, value: 100}
+  outcome: [], // { categoryId: 2, value: 100 }
+  category: [], // { categoryId: 1, name: 'Развлечения' }
+  id: 0 //счетчик айди категории, общий для расходов и доходов
 }
 
 let savedState = localStorage.getItem('state')
@@ -20,9 +21,14 @@ let saveState = () => {
   localStorage.setItem('state', JSON.stringify(state))
 }
 
+
+
 /// View-Model
+let outcomeCounter = 0;
 
 let addCategory = (categoryId) => {
+  let id = state.id
+
   let inputId
   switch (categoryId) {
     case 1:
@@ -33,10 +39,34 @@ let addCategory = (categoryId) => {
     default:
       break;
   }
-  name = document.getElementById(inputId).value
-  state.category.push({ categoryId, name })
-  document.getElementById(inputId).value = '' // обнуляем инпут
-  render('outcome-form', state.category, 'categoryInput')
+  let $categoryInput = document.getElementById(inputId)
+  let categoryName = $categoryInput.value
+  $categoryInput.value = '' // обнуляем инпут
+  
+  renderCategory(categoryName, id)
+  renderRadio(categoryName, id)
+
+  state.category.push({id, categoryId,categoryName})
+  state.id += 1
+}
+
+function renderRadio(categoryName, id) {
+  const $outcomeForm = document.getElementById("outcome-form")
+  let outcomeRadioHTML = `
+    <input type="radio" value="outcomeRadio${id}" name="outcome" class="${id}">
+    <label for="outcomeRadio${id}">${categoryName}</label>
+  `;
+  $outcomeForm.insertAdjacentHTML("beforeend", outcomeRadioHTML)
+}
+
+function renderCategory(categoryName, id) {
+  const $categoriesList = document.getElementById("categories-outcome-list");
+  const categoryHTML = `
+    <div class="${id} categories-item">
+      <p class="categories-item__key">${categoryName}</p>
+      <p class="categories-item__value">0</p>
+    </div>`
+  $categoriesList.insertAdjacentHTML("beforeend", categoryHTML)
 }
 
 let removeCategory = (categoryId) => {
@@ -48,35 +78,47 @@ let addCategoryValue = (categoryId) => {
   let inputId
   switch (categoryId) {
     case 1:
-      inputId = 'add-income'
+      inputId = 'add-income-value'
       break;
     case 2:
-      inputId = 'add-outcome'
+      inputId = 'add-outcome-value'
     default:
       break;
   }
   const value = document.getElementById(inputId).value
+  document.getElementById(inputId).value = ''
+
+  let $radios = document.getElementsByName("outcome");
+  let checkedId;
+  for (let i = 0; i < $radios.length; i++) {
+    if ($radios[i].checked) {
+      checkedId = $radios[i].classList[0]
+      break
+    }
+  }
   
+  state.outcome.push({checkedId, value})
+  
+  for (key in state.outcome) {
+    console.log(state.outcome[key])
+  }
 }
 
 const defaultCategoryType = [{ categoryId: 1, name: 'Доходы' }, { categoryId: 2, name: 'Расходы' }]
 
-render = (elementId, model, blockType) => {
-  let element = document.getElementById(elementId)
-  model.forEach((item, index) => {
-    element.insertAdjacentHTML('beforeend', blockType === 'categoryInput' ? categoryInput('category' + index, item.name) : null)
-  })
-  saveState()
-}
+
+
+// render = (elementId, model, blockType) => {
+//   let element = document.getElementById(elementId)
+//   model.forEach((item, index) => {
+//     element.insertAdjacentHTML('beforeend', blockType === 'categoryInput' ? categoryInput('category' + index, item.name) : null)
+//   })
+//   saveState()
+// }
 
 /// Components
 
-let categoryInput = (value, name) => {
-  return `<input type="radio" value="${value}" name="outcome-catergory">
-   <label for="${value}">${name}</label>`
-}
 
-render('outcome-form', state.category, 'categoryInput')
 
 // function getSum() {
 //   let sum = 0;

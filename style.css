@@ -16,125 +16,17 @@
   padding: 10px 0;
 }
 
-/* .categories {
+.categories {
   display: flex;
   flex-wrap: wrap;
   justify-content: space-between;
   flex-direction: column;
 }
 
-.outcome-diagram {
-  height: 100px;
-  width: 100px;
-  border-radius: 50%;
-  background: conic-gradient(var(--food) 0deg var(--foodPercent), 
-    var(--transport) var(--foodPercent) calc(var(--transportPercent) + var(--foodPercent)), red var(--transportPercent) var(--healthPercent), green var(--healthPercent) var(--h))
-}
-
 .categories-item {
   margin: 20px;
+  display: flex;
+  flex-direction: row;
+  justify-content: space-around;
+  width: 200px
 }
-
-#food {
-  position: relative;
-}
-
-#food::before {
-  content: "";
-  position:absolute;
-  left: -20px;
-  background-color: var(--food);
-  width: 16px;
-  height: 16px;
-}
-
-#transport {
-  position: relative;
-}
-
-#transport::before {
-  content: "";
-  position:absolute;
-  left: -20px;
-  background-color: var(--transport);
-  width: 16px;
-  height: 16px;
-}
-
-#health {
-  position: relative;
-}
-
-#health::before {
-  content: "";
-  position:absolute;
-  left: -20px;
-  background-color: red;
-  width: 16px;
-  height: 16px;
-}
-
-#home {
-  position: relative;
-}
-
-#home::before {
-  content: "";
-  position:absolute;
-  left: -20px;
-  background-color: green;
-  width: 16px;
-  height: 16px;
-}
-
-#salary {
-  position: relative;
-}
-
-#salary::before {
-  content: "";
-  position:absolute;
-  left: -20px;
-  background-color: green;
-  width: 16px;
-  height: 16px;
-}
-
-#schoolarship {
-  position: relative;
-}
-
-#schoolarship::before {
-  content: "";
-  position:absolute;
-  left: -20px;
-  background-color: navy;
-  width: 16px;
-  height: 16px;
-}
-
-#pension {
-  position: relative;
-}
-
-#pension::before {
-  content: "";
-  position:absolute;
-  left: -20px;
-  background-color: yellowgreen;
-  width: 16px;
-  height: 16px;
-}
-
-#other-incomes {
-  position: relative;
-}
-
-#other-incomes::before {
-  content: "";
-  position:absolute;
-  left: -20px;
-  background-color: coral;
-  width: 16px;
-  height: 16px;
-} */

@@ -12,21 +12,18 @@
 <body>
   <h1 class="main-title">Трекер финансов</h1>
   <div class="main-wrapper">
-    <article class="outcome">
+    <article class="outcome" id="outcome">
       <h1>Расходы</h1>
-      <form action="" class="outcome-form" id="outcome-form">
-        <input type="number">
-        <button class="outome-form__add" id="add-outcome">Добавить расходы</button>
-        <!-- тут будут отображаться категории -->
-    </form>
-      <section class="categories" id="categories-income-list">
-        <div class="categories-item">
-          <p class="categories-item__key">Еда</p>
-          <p class="categories-item__value">0</p>
-        </div>
+      <section class="outcome-form" id="outcome-form" name="outcome">
+        <input type="number" id="add-outcome-value">
+        <button class="outome-form__add" id="add-outcome" onclick="addCategoryValue(2)">Добавить расходы</button>
         
+        <!-- тут будут отображаться радио кнопки расходов -->
       </section>
-      <input type="text" placeholder="Введите название..." id="add-income-category-name">
+      <section class="categories" id="categories-outcome-list">
+      <!-- тут будут отображаться категории и их значения   -->
+      </section>
+      <input type="text" placeholder="Введите название..." id="add-outcome-category-name">
       <button class="outcome__add" id="add-outcome-category" onclick="addCategory(2)">Добавить категорию
         расходов</button>
       <button class="outcome__reset" onclick="resetState()">Сбросить состояние</button>
