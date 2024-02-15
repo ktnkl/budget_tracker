@@ -1,11 +1,19 @@
 /// Model
 
-const defaultState = {
-  income: [], // { categoryId: 1, value: 100}
-  outcome: [], // { categoryId: 2, value: 100 }
-  category: [], // { categoryId: 1, name: 'Развлечения' }
-  id: 0 //счетчик айди категории, общий для расходов и доходов
-}
+// state = [
+//   {
+//   id: 0..n 
+//   name: food,
+//   type: 1 or 2, 1 - income, 2 - outcome
+//   values: [12, 2323], при добавлении категории ничего не добавляем
+//   data: [new Date], так же как и со значением
+//   }
+// ]
+// мне кажеся более удобным рендер новых значений такой структурой
+
+const defaultState = [
+
+]
 
 let savedState = localStorage.getItem('state')
 
@@ -27,7 +35,7 @@ let saveState = () => {
 let outcomeCounter = 0;
 
 let addCategory = (categoryId) => {
-  let id = state.id
+  let id = state.length
 
   let inputId
   switch (categoryId) {
@@ -42,36 +50,19 @@ let addCategory = (categoryId) => {
   let $categoryInput = document.getElementById(inputId)
   let categoryName = $categoryInput.value
   $categoryInput.value = '' // обнуляем инпут
-  
-  renderCategory(categoryName, id)
+
+  const obj = {
+    id,
+    categoryName,
+    categoryId,
+    value: [],
+    date: []
+  }
+
+  state.push(obj)
+
+  renderCategory(state)
   renderRadio(categoryName, id)
-
-  state.category.push({id, categoryId,categoryName})
-  state.id += 1
-}
-
-function renderRadio(categoryName, id) {
-  const $outcomeForm = document.getElementById("outcome-form")
-  let outcomeRadioHTML = `
-    <input type="radio" value="outcomeRadio${id}" name="outcome" class="${id}">
-    <label for="outcomeRadio${id}">${categoryName}</label>
-  `;
-  $outcomeForm.insertAdjacentHTML("beforeend", outcomeRadioHTML)
-}
-
-function renderCategory(categoryName, id) {
-  const $categoriesList = document.getElementById("categories-outcome-list");
-  const categoryHTML = `
-    <div class="${id} categories-item">
-      <p class="categories-item__key">${categoryName}</p>
-      <p class="categories-item__value">0</p>
-    </div>`
-  $categoriesList.insertAdjacentHTML("beforeend", categoryHTML)
-}
-
-let removeCategory = (categoryId) => {
-  state.category.filter((item) => item.id !== categoryId)
-  render()
 }
 
 let addCategoryValue = (categoryId) => {
@@ -86,7 +77,7 @@ let addCategoryValue = (categoryId) => {
       break;
   }
   const value = document.getElementById(inputId).value
-  document.getElementById(inputId).value = ''
+  
 
   let $radios = document.getElementsByName("outcome");
   let checkedId;
@@ -97,12 +88,62 @@ let addCategoryValue = (categoryId) => {
     }
   }
   
-  state.outcome.push({checkedId, value})
+  state[checkedId].value.push(value)
   
-  for (key in state.outcome) {
-    console.log(state.outcome[key])
-  }
+  renderCategory(state)
+  
 }
+
+function renderRadio(categoryName, id) {
+  const $outcomeForm = document.getElementById("outcome-form")
+  let outcomeRadioHTML = `
+    <input type="radio" value="outcomeRadio${id}" name="outcome" class="${id}">
+    <label for="outcomeRadio${id}">${categoryName}</label>
+  `;
+  $outcomeForm.insertAdjacentHTML("beforeend", outcomeRadioHTML)
+}
+
+function renderCategory(state) {
+  const $categoriesList = document.getElementById("categories-outcome-list");
+  $categoriesList.innerHTML = ''
+  
+  for (let i = 0; i < state.length; i ++) {
+    let id = state[i].id
+    let categoryName = state[i].categoryName
+    let valueSum = 0
+    for (let j = 0; j < state[i].value.length; j ++) {
+      valueSum += Number(state[i].value[j])
+    }
+    const categoryHTML = `
+    <div class="${id} categories-item">
+      <p class="categories-item__key">${categoryName}</p>
+      <p class="categories-item__value">${valueSum}</p>
+    </div>`
+    $categoriesList.insertAdjacentHTML("beforeend", categoryHTML)
+  }
+  // state.map(i => {
+  //   let id = i.id
+  //   let categoryName = i.categoryName
+  //   let valueSum
+  //   i.value.map(i => {
+  //     valueSum += Number(i)
+  //   })
+  //   const categoryHTML = `
+  //   <div class="${id} categories-item">
+  //     <p class="categories-item__key">${categoryName}</p>
+  //     <p class="categories-item__value">${valueSum}</p>
+  //   </div>`
+  // $categoriesList.insertAdjacentHTML("beforeend", categoryHTML)
+  // })
+  
+}
+
+let removeCategory = (categoryId) => {
+  state.category.filter((item) => item.id !== categoryId)
+  render()
+}
+
+
 
 const defaultCategoryType = [{ categoryId: 1, name: 'Доходы' }, { categoryId: 2, name: 'Расходы' }]
 
