@@ -29,12 +29,14 @@ let saveState = () => {
   localStorage.setItem('state', JSON.stringify(state))
 }
 
+renderCategory(1)
+renderRadio(1)
 
+renderCategory(2)
+renderRadio(2)
 
 /// View-Model
-let outcomeCounter = 0;
-
-let addCategory = (categoryId) => {
+function addCategory(categoryId) {
   let id = state.length
 
   let inputId
@@ -61,25 +63,30 @@ let addCategory = (categoryId) => {
 
   state.push(obj)
 
-  renderCategory(state)
-  renderRadio(categoryName, id)
+  renderCategory(categoryId)
+  renderRadio(categoryId)
+  saveState()
 }
 
-let addCategoryValue = (categoryId) => {
+function addCategoryValue(categoryId) {
   let inputId
+  let radioName
   switch (categoryId) {
     case 1:
       inputId = 'add-income-value'
+      radioName = 'income'
       break;
     case 2:
       inputId = 'add-outcome-value'
+      radioName = 'outcome'
     default:
       break;
   }
-  const value = document.getElementById(inputId).value
-  
+  const $categoryValueInput = document.getElementById(inputId)
+  let value = $categoryValueInput.value
+  $categoryValueInput.value = ''
 
-  let $radios = document.getElementsByName("outcome");
+  let $radios = document.getElementsByName(radioName);
   let checkedId;
   for (let i = 0; i < $radios.length; i++) {
     if ($radios[i].checked) {
@@ -90,113 +97,66 @@ let addCategoryValue = (categoryId) => {
   
   state[checkedId].value.push(value)
   
-  renderCategory(state)
-  
+  renderCategory(categoryId)
+  saveState()
 }
 
-function renderRadio(categoryName, id) {
-  const $outcomeForm = document.getElementById("outcome-form")
-  let outcomeRadioHTML = `
-    <input type="radio" value="outcomeRadio${id}" name="outcome" class="${id}">
-    <label for="outcomeRadio${id}">${categoryName}</label>
-  `;
-  $outcomeForm.insertAdjacentHTML("beforeend", outcomeRadioHTML)
+function renderRadio(categoryId) {
+  let radioName
+  switch (categoryId) {
+    case 1:
+      inputId = 'income-radios'
+      radioName = 'income'
+      break;
+    case 2:
+      inputId = 'outcome-radios'
+      radioName = 'outcome'
+    default:
+      break;
+  }
+  const $radios = document.getElementById(inputId)
+  $radios.innerHTML = ''
+  for (let i = 0; i < state.length; i ++) {
+    if (state[i].categoryId == categoryId) {
+      let {id, categoryName} = state[i]
+      let radioHTML = `
+      <input type="radio" value="${radioName}Radio${id}" name="${radioName}"  class="${id}">
+      <label for="${radioName}Radio${id}">${categoryName}</label>
+      `;
+      $radios.insertAdjacentHTML("beforeend", radioHTML)
+  }}
 }
 
-function renderCategory(state) {
-  const $categoriesList = document.getElementById("categories-outcome-list");
+function renderCategory(categoryId) {
+  let categoriesListId
+  switch (categoryId) {
+    case 1:
+      categoriesListId = "categories-income-list"
+      radioName = 'income'
+      break;
+    case 2:
+      categoriesListId = "categories-outcome-list"
+      radioName = 'outcome'
+    default:
+      break;
+  }
+  const $categoriesList = document.getElementById(categoriesListId);
   $categoriesList.innerHTML = ''
   
   for (let i = 0; i < state.length; i ++) {
-    let id = state[i].id
-    let categoryName = state[i].categoryName
-    let valueSum = 0
-    for (let j = 0; j < state[i].value.length; j ++) {
-      valueSum += Number(state[i].value[j])
-    }
-    const categoryHTML = `
-    <div class="${id} categories-item">
-      <p class="categories-item__key">${categoryName}</p>
-      <p class="categories-item__value">${valueSum}</p>
-    </div>`
-    $categoriesList.insertAdjacentHTML("beforeend", categoryHTML)
-  }
-  // state.map(i => {
-  //   let id = i.id
-  //   let categoryName = i.categoryName
-  //   let valueSum
-  //   i.value.map(i => {
-  //     valueSum += Number(i)
-  //   })
-  //   const categoryHTML = `
-  //   <div class="${id} categories-item">
-  //     <p class="categories-item__key">${categoryName}</p>
-  //     <p class="categories-item__value">${valueSum}</p>
-  //   </div>`
-  // $categoriesList.insertAdjacentHTML("beforeend", categoryHTML)
-  // })
+    if (state[i].categoryId == categoryId) {
+      let {id, categoryName, value} = state[i]
+      let valueSum = 0
+      for (let j = 0; j < value.length; j ++) {
+        valueSum += Number(value[j])
+      }
+      const categoryHTML = `
+      <div class="${id} categories-item">
+        <p class="categories-item__key">${categoryName}</p>
+        <p class="categories-item__value">${valueSum}</p>
+      </div>`
+      $categoriesList.insertAdjacentHTML("beforeend", categoryHTML)
+  }}
   
 }
 
-let removeCategory = (categoryId) => {
-  state.category.filter((item) => item.id !== categoryId)
-  render()
-}
-
-
-
-const defaultCategoryType = [{ categoryId: 1, name: 'Доходы' }, { categoryId: 2, name: 'Расходы' }]
-
-
-
-// render = (elementId, model, blockType) => {
-//   let element = document.getElementById(elementId)
-//   model.forEach((item, index) => {
-//     element.insertAdjacentHTML('beforeend', blockType === 'categoryInput' ? categoryInput('category' + index, item.name) : null)
-//   })
-//   saveState()
-// }
-
-/// Components
-
-
-
-// function getSum() {
-//   let sum = 0;
-//   let elements = document.querySelectorAll('.outcome .categories-item__value')
-//   elements.forEach((Element) => {
-//     console.log(Element.innerHTML)
-//     sum = sum + Number(Element.innerHTML)
-//   })
-//   document.getElementById('sum').innerHTML = sum
-// }
-
-// const addForm = document.getElementById('addForm');
-// const addValue = document.getElementById('addValue');
-// const outcomeForm = document.querySelector(".outcome-form");
-// addForm.addEventListener('click', () => {
-//   console.log('click')
-//   addForm.classList.toggle('invisible');
-//   outcomeForm.classList.toggle('invisible')
-// })
-
-// const stylesheet = document.styleSheets[0];
-// const newRule = [...stylesheet.cssRules].find(
-//   (r) => r.selectorText === ".outcome",
-// );
-// newRule.style.setProperty('--food', 'orangered')
-
-// newRule.style.setProperty('--transport', 'blue')
-// getSum()
-
-// let sum = document.getElementById('sum').innerHTML
-// console.log(sum)
-// let foodPercent = document.querySelector('#food .categories-item__value').innerHTML * 360 / sum;
-// let transportPercent = document.querySelector('#transport .categories-item__value').innerHTML * 360 / sum;
-// let healthPercent = document.querySelector('#health .categories-item__value').innerHTML * 360 / sum;
-// let homePercent = document.querySelector('#home .categories-item__value').innerHTML * 360 / sum;
-
-// newRule.style.setProperty('--foodPercent', foodPercent + 'deg');
-// newRule.style.setProperty('--transportPercent', transportPercent + 'deg');
-// newRule.style.setProperty('--healthPercent', healthPercent + 'deg');
-// newRule.style.setProperty('--homePercent', homePercent + 'deg');

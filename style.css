@@ -8,12 +8,20 @@
   justify-content: space-around;
 }
 
-.invisible {
-  display: none;
+.outcome, .income {
+  max-width: 50%;
 }
 
 .outcome-form {
   padding: 10px 0;
+}
+
+.radios {
+  margin: 10px;
+
+  display: flex;
+  flex-direction: row;
+  flex-wrap: wrap;
 }
 
 .categories {
@@ -21,6 +29,8 @@
   flex-wrap: wrap;
   justify-content: space-between;
   flex-direction: column;
+
+  margin: 20px
 }
 
 .categories-item {

@@ -17,38 +17,43 @@
       <section class="outcome-form" id="outcome-form" name="outcome">
         <input type="number" id="add-outcome-value">
         <button class="outome-form__add" id="add-outcome" onclick="addCategoryValue(2)">Добавить расходы</button>
+        <section class="radios" id="outcome-radios">
+          <!-- тут будут отображаться радио кнопки расходов -->
+        </section>
         
-        <!-- тут будут отображаться радио кнопки расходов -->
+        
       </section>
-      <section class="categories" id="categories-outcome-list">
-      <!-- тут будут отображаться категории и их значения   -->
-      </section>
+
       <input type="text" placeholder="Введите название..." id="add-outcome-category-name">
       <button class="outcome__add" id="add-outcome-category" onclick="addCategory(2)">Добавить категорию
         расходов</button>
       <button class="outcome__reset" onclick="resetState()">Сбросить состояние</button>
-    </article>
-    <article class="income">
-      <h1>Доходы</h1>
-      <section class="categories">
-        <div class="categories-item" id="salary">
-          <span class="categories-item__key">Зарплата</span>
-          <span class="categories-item__value">28000</span>
-        </div>
-        <div class="categories-item" id="schoolarship">
-          <span class="categories-item__key">Стипендия</span>
-          <span class="categories-item__value">2300</span>
-        </div>
-        <div class="categories-item" id="pension">
-          <span class="categories-item__key">Пенсия</span>
-          <span class="categories-item__value">10000</span>
-        </div>
-        <div class="categories-item" id="other-incomes">
-          <span class="categories-item__key">Другие доходы</span>
-          <span class="categories-item__value">15200</span>
-        </div>
+
+      <section class="categories" id="categories-outcome-list">
+      <!-- тут будут отображаться категории и их значения   -->
       </section>
-      <button class="outcome__add" id="add-category" onclick="addCategory(1)">Добавить категорию доходов</button>
+      
+    </article>
+
+    <article class="income" id="income">
+      <h1>Доходы</h1>
+      <section class="income-form" id="income-form" name="income">
+        <input type="number" id="add-income-value">
+        <button class="income-form__add" id="add-income" onclick="addCategoryValue(1)">Добавить доходы</button>
+        <section class="radios" id="income-radios">
+          <!-- тут будут отображаться радио кнопки расходов -->
+        </section>
+        
+        
+      </section>
+
+      <input type="text" placeholder="Введите название..." id="add-income-category-name">
+      <button class="income__add" id="add-income-category" onclick="addCategory(1)">Добавить категорию
+        доходов</button>
+      <button class="income__reset" onclick="resetState()">Сбросить состояние</button>
+      <section class="categories" id="categories-income-list">
+        <!-- тут будут отображаться категории и их значения   -->
+      </section>
     </article>
     <script src="script.js"></script>
   </div>
