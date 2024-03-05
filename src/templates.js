@@ -1,0 +1,43 @@
+function tab(categoryType) {
+  return `
+    <article id="${categoryType}" class="${categoryType}">
+      <section class="${categoryType}-form" id="${categoryType}-form" name="${categoryType}">
+      <input type="number" id="add-${categoryType}-value">
+      <button class="${categoryType}-form__add" id="add-${categoryType}" >Добавить значение</button>
+      <section class="radios" id="${categoryType}-radios">
+      </section>
+      </section>
+
+      <input type="text" placeholder="Введите название..." id="add-${categoryType}-category-name">
+      <button class="${categoryType}__add" id="add-${categoryType}-category">Добавить категорию
+      </button>
+      <button class="${categoryType}__reset" id="reset">Сбросить состояние</button>
+
+      <section class="categories" id="categories-${categoryType}-list">
+      </section>
+
+      <section id="budget">
+        <p>Всего средств:</p>
+        <p id="budget-value">
+
+        </p>
+      </section>
+    </article>
+  `
+}
+
+function category(id, categoryName, valueSum) {
+  return `
+    <div class="${id} categories-item">
+      <p class="categories-item__key">${categoryName}</p>
+      <p class="categories-item__value">${valueSum}</p>
+    </div>`
+}
+
+function radio(id, categoryName, radioName) {
+  return `
+    <input type="radio" value="${radioName}Radio${id}" name="${radioName}"  class="${id}">
+    <label for="${radioName}Radio${id}">${categoryName}</label>
+  `
+}
+export {tab, category, radio}

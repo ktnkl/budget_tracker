@@ -1,0 +1,55 @@
+.main-wrapper {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-around;
+}
+
+.big-category-chooser {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-around;
+}
+
+.big-category-chooser {
+  margin: 10px 25px;
+}
+
+.choosed {
+  border: 1px grey solid;
+  padding: 15px
+}
+
+#main {
+  border: 1px grey solid;
+  padding: 15px
+}
+
+.outcome-form, 
+.income-form {
+  padding: 10px 0;
+}
+
+.radios {
+  margin: 10px;
+
+  display: flex;
+  flex-direction: row;
+  flex-wrap: wrap;
+}
+
+.categories {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
+  flex-direction: column;
+
+  margin: 20px
+}
+
+.categories-item {
+  margin: 20px;
+  display: flex;
+  flex-direction: row;
+  justify-content: space-around;
+  width: 200px
+}
