@@ -132,15 +132,16 @@ function renderPage(categoryId) {
   document.getElementById(`add-${categoryType}-category`).addEventListener('click', () => addCategory(categoryId))
   document.getElementById(`reset`).addEventListener('click', () => resetState())
   
-  const catChooser = document.querySelector('.big-category-chooser').childNodes
-  for (cat of catChooser) {
-    if (cat.id == `${categoryType}-chooser`) {
-      cat.classList.add('choosed')
+  const catChooser = document.querySelector('.big-category-chooser').children
+  for (let i=0; i < catChooser.length; i ++) {
+    if (catChooser[i].id == `${categoryType}-chooser`) {
+      catChooser[i].classList.add('choosed')
     } else {
-      cat.classList.remove('choosed')
+      if (catChooser[i].classList.contains('choosed')){
+        catChooser[i].classList.remove('choosed')
+      }
     }
   }
-
   renderRadio(categoryId)
   renderCategory(categoryId)
   renderBudget(state)

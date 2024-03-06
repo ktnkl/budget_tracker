@@ -677,9 +677,11 @@ function renderPage(categoryId) {
     document.getElementById(`add-${categoryType}`).addEventListener("click", ()=>addCategoryValue(categoryId));
     document.getElementById(`add-${categoryType}-category`).addEventListener("click", ()=>addCategory(categoryId));
     document.getElementById(`reset`).addEventListener("click", ()=>resetState());
-    const catChooser = document.querySelector(".big-category-chooser").childNodes;
-    for (cat of catChooser)if ((0, _utilsJs.cat).id == `${categoryType}-chooser`) (0, _utilsJs.cat).classList.add("choosed");
-    else (0, _utilsJs.cat).classList.remove("choosed");
+    const catChooser = document.querySelector(".big-category-chooser").children;
+    for(let i = 0; i < catChooser.length; i++){
+        if (catChooser[i].id == `${categoryType}-chooser`) catChooser[i].classList.add("choosed");
+        else if (catChooser[i].classList.contains("choosed")) catChooser[i].classList.remove("choosed");
+    }
     renderRadio(categoryId);
     renderCategory(categoryId);
     renderBudget(state);
