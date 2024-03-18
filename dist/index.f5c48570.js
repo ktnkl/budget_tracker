@@ -663,9 +663,12 @@ function addCategoryValue(categoryId) {
         break;
     }
     state.categories[checkedId].value.push(value);
+    let date = new Date();
+    state.categories[checkedId].date.push(date);
     renderCategory(categoryId);
     getBudget(state);
     saveState();
+    console.log(state);
 }
 function renderPage(categoryId) {
     const categoryType = `${(0, _utilsJs.cat)(categoryId)}`;
@@ -715,6 +718,56 @@ function renderBudget(state) {
 //View
 let catId = state.userChoises.categoryId;
 renderPage(catId);
+const burger = document.getElementById("burger");
+burger.addEventListener("click", (event)=>{
+    document.getElementById("burger-menu").classList.toggle("invisible");
+});
+function filterByCategory(item1) {
+    return item1.categoryId == catId;
+}
+const data = state.categories.filter(function(item1) {
+    return item1.categoryId == catId;
+});
+console.log(data);
+// {
+//   labels: state.categories.map(index => {
+//     if (index.categoryId == catId) {
+//       return index.categoryName
+//     }
+//   }),
+//   series: state.categories.map(index => {
+//     if (index.categoryId == catId) {
+//       index.value.map(item => {
+//         return Number(item)
+//       })
+//     }
+//   })
+// };
+const options = {
+    width: 300,
+    height: 300
+};
+const responsiveOptions = [
+    [
+        "screen and (min-width: 640px)",
+        {
+            chartPadding: 30,
+            labelOffset: 100,
+            labelDirection: "explode",
+            labelInterpolationFnc: function(value) {
+                return value;
+            }
+        }
+    ],
+    [
+        "screen and (min-width: 1024px)",
+        {
+            labelOffset: 80,
+            chartPadding: 20
+        }
+    ]
+];
+new Chartist.Pie(".ct-chart", data, options, responsiveOptions);
 
 },{"./templates.js":"gOO7a","./utils.js":"en4he"}],"gOO7a":[function(require,module,exports) {
 var parcelHelpers = require("@parcel/transformer-js/src/esmodule-helpers.js");
@@ -731,22 +784,18 @@ function tab(categoryType) {
       <section class="radios" id="${categoryType}-radios">
       </section>
       </section>
-
       <input type="text" placeholder="\u{412}\u{432}\u{435}\u{434}\u{438}\u{442}\u{435} \u{43D}\u{430}\u{437}\u{432}\u{430}\u{43D}\u{438}\u{435}..." id="add-${categoryType}-category-name">
       <button class="${categoryType}__add" id="add-${categoryType}-category">\u{414}\u{43E}\u{431}\u{430}\u{432}\u{438}\u{442}\u{44C} \u{43A}\u{430}\u{442}\u{435}\u{433}\u{43E}\u{440}\u{438}\u{44E}
       </button>
       <button class="${categoryType}__reset" id="reset">\u{421}\u{431}\u{440}\u{43E}\u{441}\u{438}\u{442}\u{44C} \u{441}\u{43E}\u{441}\u{442}\u{43E}\u{44F}\u{43D}\u{438}\u{435}</button>
-
       <section class="categories" id="categories-${categoryType}-list">
       </section>
-
-      <section id="budget">
-        <p>\u{412}\u{441}\u{435}\u{433}\u{43E} \u{441}\u{440}\u{435}\u{434}\u{441}\u{442}\u{432}:</p>
-        <p id="budget-value">
-
-        </p>
-      </section>
     </article>
+
+    <section class="ct-chart" id="diagram">
+    
+    </section>
+    
   `;
 }
 function category(id, categoryName, valueSum) {

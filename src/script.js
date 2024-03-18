@@ -113,10 +113,15 @@ function addCategoryValue(categoryId) {
   }
 
   state.categories[checkedId].value.push(value)
+
+  let date = new Date()
+  state.categories[checkedId].date.push(date)
   
   renderCategory(categoryId)
   getBudget(state)
   saveState()
+
+  console.log(state)
 }
 
 function renderPage(categoryId) {
@@ -183,6 +188,62 @@ function renderBudget(state) {
   $budgetValue.innerHTML = state.budget
 }
 
+
 //View
 let catId = state.userChoises.categoryId
 renderPage(catId)
+
+const burger = document.getElementById("burger")
+burger.addEventListener("click", (event) => {
+  document.getElementById("burger-menu").classList.toggle("invisible")
+})
+
+function filterByCategory(item){
+  return item.categoryId == catId
+}
+
+const data = state.categories.filter(function(item) {
+  return item.categoryId == catId
+})
+
+console.log(data)
+
+// {
+//   labels: state.categories.map(index => {
+//     if (index.categoryId == catId) {
+//       return index.categoryName
+//     }
+//   }),
+//   series: state.categories.map(index => {
+//     if (index.categoryId == catId) {
+//       index.value.map(item => {
+//         return Number(item)
+//       })
+//     }
+//   })
+// };
+
+
+
+const options = {
+  width: 300,
+  height: 300,
+
+};
+
+const responsiveOptions = [
+  ['screen and (min-width: 640px)', {
+    chartPadding: 30,
+    labelOffset: 100,
+    labelDirection: 'explode',
+    labelInterpolationFnc: function(value) {
+      return value;
+    }
+  }],
+  ['screen and (min-width: 1024px)', {
+    labelOffset: 80,
+    chartPadding: 20
+  }]
+];
+
+new Chartist.Pie('.ct-chart', data, options, responsiveOptions);

@@ -4,29 +4,63 @@
   justify-content: space-around;
 }
 
+.burger {
+  width: 32px;
+  height: 32px;
+
+  align-self: flex-start;
+}
+
+.burger-menu {
+  background-color: #fff;
+  display: flex;
+  flex-direction: column;
+}
+
+.burger-menu__item {
+  color: #000;
+  text-decoration: none;
+}
+
+.invisible {
+  display: none;
+}
+
+.budget {
+  align-self: center;
+}
+
 .big-category-chooser {
   display: flex;
   flex-direction: row;
   justify-content: space-around;
+
+  margin: 0;
 }
 
-.big-category-chooser {
-  margin: 10px 25px;
+.big-category-chooser__item {
+  border: 10px solid transparent;
 }
 
 .choosed {
-  border: 1px grey solid;
-  padding: 15px
+  border: 10px #a2fd61 solid;
 }
 
 #main {
-  border: 1px grey solid;
-  padding: 15px
+  border: 10px #a2fd61 solid;
+  padding: 15px;
+
+  display: flex;
+  justify-content: space-around;
+  flex-direction: row;
 }
+
+
 
 .outcome-form, 
 .income-form {
   padding: 10px 0;
+  margin-top: 0px;
 }
 
 .radios {

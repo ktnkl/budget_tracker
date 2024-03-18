@@ -7,22 +7,18 @@ function tab(categoryType) {
       <section class="radios" id="${categoryType}-radios">
       </section>
       </section>
-
       <input type="text" placeholder="Введите название..." id="add-${categoryType}-category-name">
       <button class="${categoryType}__add" id="add-${categoryType}-category">Добавить категорию
       </button>
       <button class="${categoryType}__reset" id="reset">Сбросить состояние</button>
-
       <section class="categories" id="categories-${categoryType}-list">
       </section>
-
-      <section id="budget">
-        <p>Всего средств:</p>
-        <p id="budget-value">
-
-        </p>
-      </section>
     </article>
+
+    <section class="ct-chart" id="diagram">
+    
+    </section>
+    
   `
 }
 
