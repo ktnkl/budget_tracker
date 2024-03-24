@@ -601,7 +601,8 @@ const defaultState = {
     categories: [],
     userChoises: {
         categoryId: 1,
-        theme: "light"
+        theme: "light",
+        userName: "demo"
     },
     budget: 0
 };
@@ -666,6 +667,7 @@ function addCategoryValue(categoryId) {
     let date = new Date();
     state.categories[checkedId].date.push(date);
     renderCategory(categoryId);
+    renderDiagramm(categoryId);
     getBudget(state);
     saveState();
     console.log(state);
@@ -688,6 +690,49 @@ function renderPage(categoryId) {
     renderRadio(categoryId);
     renderCategory(categoryId);
     renderBudget(state);
+    renderDiagramm(categoryId);
+}
+function renderDiagramm(categoryId) {
+    const labels = state.categories.filter((item1)=>{
+        return item1.categoryId == categoryId;
+    }).map((item1)=>{
+        return item1.categoryName;
+    });
+    const series = [];
+    for(let i = 0; i < state.categories.length; i++)if (state.categories[i].categoryId == categoryId) {
+        let sum = 0;
+        for(let j = 0; j < state.categories[i].value.length; j++)sum += Number(state.categories[i].value[j]);
+        series.push(sum);
+    }
+    const data = {
+        labels,
+        series
+    };
+    const options = {
+        width: 500,
+        height: 300
+    };
+    const responsiveOptions = [
+        [
+            "screen and (min-width: 640px)",
+            {
+                chartPadding: 30,
+                labelOffset: 100,
+                labelDirection: "explode",
+                labelInterpolationFnc: function(value) {
+                    return value;
+                }
+            }
+        ],
+        [
+            "screen and (min-width: 1024px)",
+            {
+                labelOffset: 80,
+                chartPadding: 20
+            }
+        ]
+    ];
+    new Chartist.Pie(".ct-chart", data, options, responsiveOptions);
 }
 function renderRadio(categoryId) {
     const radioName = `${(0, _utilsJs.cat)(categoryId)}`;
@@ -717,57 +762,13 @@ function renderBudget(state) {
 }
 //View
 let catId = state.userChoises.categoryId;
-renderPage(catId);
+if (state.userChoises.userName == "demo") document.getElementById("main").innerHTML = (0, _templatesJs.requireLogIn)();
+else renderPage(catId);
 const burger = document.getElementById("burger");
 burger.addEventListener("click", (event)=>{
     document.getElementById("burger-menu").classList.toggle("invisible");
 });
-function filterByCategory(item1) {
-    return item1.categoryId == catId;
-}
-const data = state.categories.filter(function(item1) {
-    return item1.categoryId == catId;
-});
-console.log(data);
-// {
-//   labels: state.categories.map(index => {
-//     if (index.categoryId == catId) {
-//       return index.categoryName
-//     }
-//   }),
-//   series: state.categories.map(index => {
-//     if (index.categoryId == catId) {
-//       index.value.map(item => {
-//         return Number(item)
-//       })
-//     }
-//   })
-// };
-const options = {
-    width: 300,
-    height: 300
-};
-const responsiveOptions = [
-    [
-        "screen and (min-width: 640px)",
-        {
-            chartPadding: 30,
-            labelOffset: 100,
-            labelDirection: "explode",
-            labelInterpolationFnc: function(value) {
-                return value;
-            }
-        }
-    ],
-    [
-        "screen and (min-width: 1024px)",
-        {
-            labelOffset: 80,
-            chartPadding: 20
-        }
-    ]
-];
-new Chartist.Pie(".ct-chart", data, options, responsiveOptions);
+console.log(state.userChoises.userName);
 
 },{"./templates.js":"gOO7a","./utils.js":"en4he"}],"gOO7a":[function(require,module,exports) {
 var parcelHelpers = require("@parcel/transformer-js/src/esmodule-helpers.js");
@@ -775,6 +776,8 @@ parcelHelpers.defineInteropFlag(exports);
 parcelHelpers.export(exports, "tab", ()=>tab);
 parcelHelpers.export(exports, "category", ()=>category);
 parcelHelpers.export(exports, "radio", ()=>radio);
+parcelHelpers.export(exports, "requireLogIn", ()=>requireLogIn);
+parcelHelpers.export(exports, "authError", ()=>authError);
 function tab(categoryType) {
     return `
     <article id="${categoryType}" class="${categoryType}">
@@ -809,6 +812,23 @@ function radio(id, categoryName, radioName) {
     return `
     <input type="radio" value="${radioName}Radio${id}" name="${radioName}"  class="${id}">
     <label for="${radioName}Radio${id}">${categoryName}</label>
+  `;
+}
+function requireLogIn() {
+    return `
+    <div class="unauth"
+      <h1>
+        \u{412}\u{44B} \u{43D}\u{435} \u{432}\u{43E}\u{448}\u{43B}\u{438} \u{432} \u{441}\u{432}\u{43E}\u{439} \u{430}\u{43A}\u{43A}\u{430}\u{443}\u{43D}\u{442}.
+      </h1>
+      <p>
+        \u{41D}\u{430}\u{436}\u{43C}\u{438}\u{442}\u{435} \u{43A}\u{43D}\u{43E}\u{43F}\u{43A}\u{443} "\u{412}\u{445}\u{43E}\u{434}", \u{447}\u{442}\u{43E}\u{431}\u{44B} \u{430}\u{432}\u{442}\u{43E}\u{440}\u{438}\u{437}\u{43E}\u{432}\u{430}\u{442}\u{44C}\u{441}\u{44F}.
+      </p>
+    </div>
+  `;
+}
+function authError() {
+    return `
+    <span class="error" id="error"></span>
   `;
 }
 

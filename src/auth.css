@@ -1,0 +1,14 @@
+.auth {
+  display: flex;
+  flex-direction: column;
+}
+
+#login,
+#password,
+#button {
+  width: 250px;
+}
+
+.invisible {
+  display: none;
+}

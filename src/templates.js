@@ -36,4 +36,24 @@ function radio(id, categoryName, radioName) {
     <label for="${radioName}Radio${id}">${categoryName}</label>
   `
 }
-export {tab, category, radio}
+
+function requireLogIn() {
+  return `
+    <div class="unauth"
+      <h1>
+        Вы не вошли в свой аккаунт.
+      </h1>
+      <p>
+        Нажмите кнопку "Вход", чтобы авторизоваться.
+      </p>
+    </div>
+  `
+}
+
+function authError() {
+  return `
+    <span class="error" id="error"></span>
+  `
+}
+
+export {tab, category, radio, requireLogIn, authError}

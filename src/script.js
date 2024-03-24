@@ -14,7 +14,7 @@
   // budget: all money
 // }
 
-import {tab, category, radio} from "./templates.js"
+import {tab, category, radio, requireLogIn} from "./templates.js"
 import {cat} from "./utils.js"
 
 /// Model
@@ -24,7 +24,8 @@ const defaultState = {
   ],
   userChoises: {
     categoryId: 1,
-    theme: 'light'
+    theme: 'light',
+    userName: "demo",
   },
   budget: 0
 }
@@ -118,6 +119,7 @@ function addCategoryValue(categoryId) {
   state.categories[checkedId].date.push(date)
   
   renderCategory(categoryId)
+  renderDiagramm(categoryId)
   getBudget(state)
   saveState()
 
@@ -150,7 +152,54 @@ function renderPage(categoryId) {
   renderRadio(categoryId)
   renderCategory(categoryId)
   renderBudget(state)
+  renderDiagramm(categoryId)
 
+}
+
+function renderDiagramm(categoryId) {
+  const labels = state.categories.filter(item => {
+    return item.categoryId == categoryId
+  }).map(item => {
+    return item.categoryName
+  })
+  
+  const series = []
+  for (let i = 0; i < state.categories.length; i++) {
+    if (state.categories[i].categoryId == categoryId) {
+      let sum = 0
+      for (let j = 0; j < state.categories[i].value.length; j++) {
+        sum += Number(state.categories[i].value[j])
+      }
+      series.push(sum)
+    }
+  }
+  
+  const data = {
+    labels,
+    series,
+  };
+
+  const options = {
+    width: 500,
+    height: 300,
+  };
+  
+  const responsiveOptions = [
+    ['screen and (min-width: 640px)', {
+      chartPadding: 30,
+      labelOffset: 100,
+      labelDirection: 'explode',
+      labelInterpolationFnc: function(value) {
+        return value;
+      }
+    }],
+    ['screen and (min-width: 1024px)', {
+      labelOffset: 80,
+      chartPadding: 20
+    }]
+  ];
+  
+  new Chartist.Pie('.ct-chart', data, options, responsiveOptions);
 }
 
 function renderRadio(categoryId) {
@@ -191,59 +240,17 @@ function renderBudget(state) {
 
 //View
 let catId = state.userChoises.categoryId
-renderPage(catId)
+if (state.userChoises.userName == "demo") {
+  document.getElementById("main").innerHTML = requireLogIn()
+} else {
+  renderPage(catId)
+}
+
 
 const burger = document.getElementById("burger")
 burger.addEventListener("click", (event) => {
   document.getElementById("burger-menu").classList.toggle("invisible")
 })
 
-function filterByCategory(item){
-  return item.categoryId == catId
-}
+console.log(state.userChoises.userName)
 
-const data = state.categories.filter(function(item) {
-  return item.categoryId == catId
-})
-
-console.log(data)
-
-// {
-//   labels: state.categories.map(index => {
-//     if (index.categoryId == catId) {
-//       return index.categoryName
-//     }
-//   }),
-//   series: state.categories.map(index => {
-//     if (index.categoryId == catId) {
-//       index.value.map(item => {
-//         return Number(item)
-//       })
-//     }
-//   })
-// };
-
-
-
-const options = {
-  width: 300,
-  height: 300,
-
-};
-
-const responsiveOptions = [
-  ['screen and (min-width: 640px)', {
-    chartPadding: 30,
-    labelOffset: 100,
-    labelDirection: 'explode',
-    labelInterpolationFnc: function(value) {
-      return value;
-    }
-  }],
-  ['screen and (min-width: 1024px)', {
-    labelOffset: 80,
-    chartPadding: 20
-  }]
-];
-
-new Chartist.Pie('.ct-chart', data, options, responsiveOptions);

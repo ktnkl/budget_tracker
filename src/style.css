@@ -1,14 +1,25 @@
+.unauth {
+  text-align: center;
+  margin: auto;
+}
+
 .main-wrapper {
   display: flex;
   flex-direction: column;
   justify-content: space-around;
 }
 
+.site-header {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+}
+
 .burger {
   width: 32px;
   height: 32px;
 
-  align-self: flex-start;
+  margin: 15px;
 }
 
 .burger-menu {
@@ -26,8 +37,16 @@
   display: none;
 }
 
-.budget {
-  align-self: center;
+
+#budget-value {
+  text-align: center;
+}
+
+.site-header__login {
+  text-decoration: none;
+  color: #000;
+  font-size: 18px;
+  margin: 15px;
 }
 
 .big-category-chooser {
@@ -63,7 +82,8 @@
   margin-top: 0px;
 }
 
-.radios {
+#outcome-radios,
+#income-radios {
   margin: 10px;
 
   display: flex;

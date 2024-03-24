@@ -1,0 +1,1 @@
+{"mappings":"AAAA;;;;;AAKA;;;;AAMA","sources":["src/auth.css"],"sourcesContent":[".auth {\r\n  display: flex;\r\n  flex-direction: column;\r\n}\r\n\r\n#login,\r\n#password,\r\n#button {\r\n  width: 250px;\r\n}\r\n\r\n.invisible {\r\n  display: none;\r\n}"],"names":[],"version":3,"file":"index.d057ca1a.css.map","sourceRoot":"/__parcel_source_root/"}

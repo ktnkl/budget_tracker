@@ -1,0 +1,14 @@
+.auth {
+  flex-direction: column;
+  display: flex;
+}
+
+#login, #password, #button {
+  width: 250px;
+}
+
+.invisible {
+  display: none;
+}
+
+/*# sourceMappingURL=auth.d057ca1a.css.map */
