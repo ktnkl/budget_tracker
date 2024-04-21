@@ -37,16 +37,25 @@
   display: none;
 }
 
-
-#budget-value {
+.budget {
   text-align: center;
 }
+
 
 .site-header__login {
   text-decoration: none;
   color: #000;
   font-size: 18px;
   margin: 15px;
+}
+
+.login-status {
+  display: flex;
+  flex-direction: row;
+}
+
+.login-status__user {
+  margin-right: 15px;
 }
 
 .big-category-chooser {

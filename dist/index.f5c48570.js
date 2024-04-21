@@ -762,13 +762,27 @@ function renderBudget(state) {
 }
 //View
 let catId = state.userChoises.categoryId;
-if (state.userChoises.userName == "demo") document.getElementById("main").innerHTML = (0, _templatesJs.requireLogIn)();
-else renderPage(catId);
-const burger = document.getElementById("burger");
-burger.addEventListener("click", (event)=>{
-    document.getElementById("burger-menu").classList.toggle("invisible");
+const $logout = document.getElementById("log-status");
+const $userButton = document.getElementById("user");
+if (state.userChoises.userName == "demo") {
+    $logout.innerHTML = "\u0412\u043E\u0439\u0442\u0438";
+    $userButton.style.display = "none";
+    document.getElementById("main").innerHTML = (0, _templatesJs.requireLogIn)();
+    document.getElementById("login-status").innerHTML = (0, _templatesJs.loginButton)();
+} else {
+    $logout.innerHTML = "\u0412\u044B\u0439\u0442\u0438";
+    $userButton.innerHTML = state.userChoises.userName;
+    renderPage(catId);
+}
+// const burger = document.getElementById("burger")
+// burger.addEventListener("click", (event) => {
+//   document.getElementById("burger-menu").classList.toggle("invisible")
+// })
+$logout.addEventListener("click", ()=>{
+    state.userChoises.userName = "demo";
+    saveState();
+    window.location.href = "auth.html";
 });
-console.log(state.userChoises.userName);
 
 },{"./templates.js":"gOO7a","./utils.js":"en4he"}],"gOO7a":[function(require,module,exports) {
 var parcelHelpers = require("@parcel/transformer-js/src/esmodule-helpers.js");
@@ -778,6 +792,8 @@ parcelHelpers.export(exports, "category", ()=>category);
 parcelHelpers.export(exports, "radio", ()=>radio);
 parcelHelpers.export(exports, "requireLogIn", ()=>requireLogIn);
 parcelHelpers.export(exports, "authError", ()=>authError);
+parcelHelpers.export(exports, "loginButton", ()=>loginButton);
+parcelHelpers.export(exports, "loginStatus", ()=>loginStatus);
 function tab(categoryType) {
     return `
     <article id="${categoryType}" class="${categoryType}">
@@ -829,6 +845,19 @@ function requireLogIn() {
 function authError() {
     return `
     <span class="error" id="error"></span>
+  `;
+}
+function loginButton() {
+    return `
+    <a class="site-header__login" href="auth.html">\u{412}\u{445}\u{43E}\u{434}</a>
+    `;
+}
+function loginStatus(user) {
+    return `
+    <p class="login-status__user">${user}</p>
+    <p class="login-status__exit">
+      <a href="auth.html">\u{412}\u{44B}\u{445}\u{43E}\u{434}</a>
+    </p>
   `;
 }
 

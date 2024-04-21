@@ -56,4 +56,19 @@ function authError() {
   `
 }
 
-export {tab, category, radio, requireLogIn, authError}
+function loginButton(){
+  return `
+    <a class="site-header__login" href="auth.html">Вход</a>
+    `
+}
+
+function loginStatus(user) {
+  return `
+    <p class="login-status__user">${user}</p>
+    <p class="login-status__exit">
+      <a href="auth.html">Выход</a>
+    </p>
+  `
+}
+
+export {tab, category, radio, requireLogIn, authError, loginButton, loginStatus}

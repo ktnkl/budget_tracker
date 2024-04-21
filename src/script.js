@@ -14,7 +14,7 @@
   // budget: all money
 // }
 
-import {tab, category, radio, requireLogIn} from "./templates.js"
+import {tab, category, radio, requireLogIn, loginButton, loginStatus} from "./templates.js"
 import {cat} from "./utils.js"
 
 /// Model
@@ -240,17 +240,28 @@ function renderBudget(state) {
 
 //View
 let catId = state.userChoises.categoryId
+const $logout = document.getElementById("log-status")
+const $userButton = document.getElementById("user")
 if (state.userChoises.userName == "demo") {
+  $logout.innerHTML = "Войти"
+  $userButton.style.display = "none"
   document.getElementById("main").innerHTML = requireLogIn()
+  document.getElementById("login-status").innerHTML = loginButton()
 } else {
+  $logout.innerHTML = "Выйти"
+  $userButton.innerHTML = state.userChoises.userName
   renderPage(catId)
 }
 
 
-const burger = document.getElementById("burger")
-burger.addEventListener("click", (event) => {
-  document.getElementById("burger-menu").classList.toggle("invisible")
-})
+// const burger = document.getElementById("burger")
+// burger.addEventListener("click", (event) => {
+//   document.getElementById("burger-menu").classList.toggle("invisible")
+// })
 
-console.log(state.userChoises.userName)
+$logout.addEventListener("click", () => {
+  state.userChoises.userName = "demo"
+  saveState()
+  window.location.href = "auth.html"
+})
 
