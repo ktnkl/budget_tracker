@@ -14,7 +14,7 @@
   // budget: all money
 // }
 
-import {tab, category, radio, requireLogIn, loginButton, loginStatus} from "./templates.js"
+import {tab, category, radio, requireLogIn, loginButton, adminButton} from "./templates.js"
 import {cat} from "./utils.js"
 
 /// Model
@@ -46,6 +46,8 @@ let saveState = () => {
   localStorage.setItem('state', JSON.stringify(state))
 }
 
+
+// старый код - начало
 document.getElementById('outcome-chooser').addEventListener('click', () => {
   renderPage(2)
 })
@@ -235,19 +237,26 @@ function renderCategory(categoryId) {
 function renderBudget(state) {
   const $budgetValue = document.getElementById("budget-value")
   $budgetValue.innerHTML = state.budget
-}
+} 
+// старый код - конец
 
 
 //View
 let catId = state.userChoises.categoryId
 const $logout = document.getElementById("log-status")
 const $userButton = document.getElementById("user")
+
+// перенести потом это все в рендер
+
 if (state.userChoises.userName == "demo") {
   $logout.innerHTML = "Войти"
   $userButton.style.display = "none"
   document.getElementById("main").innerHTML = requireLogIn()
   document.getElementById("login-status").innerHTML = loginButton()
 } else {
+  if (state.userChoises.userName == 'admin') {
+    document.getElementById("buttons-list").innerHTML += adminButton()
+  }
   $logout.innerHTML = "Выйти"
   $userButton.innerHTML = state.userChoises.userName
   renderPage(catId)
@@ -263,5 +272,9 @@ $logout.addEventListener("click", () => {
   state.userChoises.userName = "demo"
   saveState()
   window.location.href = "auth.html"
+})
+
+document.getElementById("admBtn").addEventListener("click", () => {
+  window.location.href = "./admin.html"
 })
 

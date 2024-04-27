@@ -764,12 +764,14 @@ function renderBudget(state) {
 let catId = state.userChoises.categoryId;
 const $logout = document.getElementById("log-status");
 const $userButton = document.getElementById("user");
+// перенести потом это все в рендер
 if (state.userChoises.userName == "demo") {
     $logout.innerHTML = "\u0412\u043E\u0439\u0442\u0438";
     $userButton.style.display = "none";
     document.getElementById("main").innerHTML = (0, _templatesJs.requireLogIn)();
     document.getElementById("login-status").innerHTML = (0, _templatesJs.loginButton)();
 } else {
+    if (state.userChoises.userName == "admin") document.getElementById("buttons-list").innerHTML += (0, _templatesJs.adminButton)();
     $logout.innerHTML = "\u0412\u044B\u0439\u0442\u0438";
     $userButton.innerHTML = state.userChoises.userName;
     renderPage(catId);
@@ -783,6 +785,9 @@ $logout.addEventListener("click", ()=>{
     saveState();
     window.location.href = "auth.html";
 });
+document.getElementById("admBtn").addEventListener("click", ()=>{
+    window.location.href = "./admin.html";
+});
 
 },{"./templates.js":"gOO7a","./utils.js":"en4he"}],"gOO7a":[function(require,module,exports) {
 var parcelHelpers = require("@parcel/transformer-js/src/esmodule-helpers.js");
@@ -794,6 +799,12 @@ parcelHelpers.export(exports, "requireLogIn", ()=>requireLogIn);
 parcelHelpers.export(exports, "authError", ()=>authError);
 parcelHelpers.export(exports, "loginButton", ()=>loginButton);
 parcelHelpers.export(exports, "loginStatus", ()=>loginStatus);
+parcelHelpers.export(exports, "adminButton", ()=>adminButton);
+function adminButton() {
+    return `
+    <li><a href="./admin.html" id="admBtn" class="nav-link px-2">\u{410}\u{434}\u{43C}\u{438}\u{43D}\u{438}\u{441}\u{442}\u{440}\u{438}\u{440}\u{43E}\u{432}\u{430}\u{43D}\u{438}\u{435}</a></li>
+    `;
+}
 function tab(categoryType) {
     return `
     <article id="${categoryType}" class="${categoryType}">

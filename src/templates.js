@@ -1,3 +1,9 @@
+function adminButton() {
+  return `
+    <li><a href="./admin.html" id="admBtn" class="nav-link px-2">Администрирование</a></li>
+    `
+}
+
 function tab(categoryType) {
   return `
     <article id="${categoryType}" class="${categoryType}">
@@ -71,4 +77,4 @@ function loginStatus(user) {
   `
 }
 
-export {tab, category, radio, requireLogIn, authError, loginButton, loginStatus}
+export {tab, category, radio, requireLogIn, authError, loginButton, loginStatus, adminButton}
