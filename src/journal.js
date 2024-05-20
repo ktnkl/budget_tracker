@@ -1,6 +1,9 @@
-import { adminButton } from "./templates.js"
+import { adminButton, trJournal } from "./templates.js"
 
 let state = JSON.parse(localStorage.getItem('state'))
+let deals = JSON.parse(localStorage.getItem('deals'))
+
+// deals = [{}, {}, {}]
 
 document.getElementById("user").innerHTML = state.userChoises.userName
 
@@ -13,3 +16,12 @@ if (state.userChoises.userName == 'admin') {
   $buttonsList.innerHTML += adminButton()
 }
 
+function renderDeals() {
+  let $tbody = document.getElementById("table")
+  deals.map((item) => {
+    let {dealNumber, employeeName, contragent, description, date} = item
+    $tbody.insertAdjacentHTML('beforeend', trJournal(dealNumber, employeeName, contragent, description, date))
+  })
+}
+
+renderDeals()

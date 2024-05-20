@@ -33,18 +33,39 @@
         <button type="button" class="btn btn-primary" id="log-status"></button>
       </div>
     </header>
-    <section id="budget" class="budget">
-      <h1>Всего средств:</h1>
-      <p id="budget-value">
-      </p>
-    </section>
-    <section class="big-category-chooser">
-      <h1 class="big-category-chooser__item" id="outcome-chooser">Расходы</h1>
-      <h1 class="big-category-chooser__item" id="income-chooser">Доходы</h1>
-    </section>
+ 
     
     <main id="main">
-      
+      <form>
+        <div class="mb-3">
+         <label for="deal-number" class="form-label">Номер сделки</label>
+         <input type="text" class="form-control" id="deal-number">
+        </div>
+        <div class=" mb-3 d-flex flex-column">
+          <label for="" class="form-label">Сотрудник</label>
+          <button type="button" class="btn dropdown-toggle border border-grey" data-bs-toggle="dropdown" aria-expanded="false" id="employee-name">
+            Выберите сотрудника
+          </button>
+          <ul class="dropdown-menu" id="dropdown">
+            <li><a class="dropdown-item" href="#">Я</a></li>
+            <li><hr class="dropdown-divider"></li>
+          </ul>
+        </div>
+        <div class="mb-3">
+          <label for="contragent" class="form-label">Контрагент</label>
+          <input type="text" class="form-control" id="contragent">
+         </div>
+         <div class="mb-3">
+          <label for="description" class="form-label">Описание</label>
+          <input type="text" class="form-control" id="description">
+         </div>
+         <div class="mb-3">
+          <label for="date" class="form-label">Дата</label>
+          <input type="text" class="form-control" id="date">
+         </div>
+
+        <div  class="btn btn-primary" id="submit">Отправить</в>
+       </form>
     </main>
 
     <script src="../bower_components/chartist/dist/chartist.min.js"></script>

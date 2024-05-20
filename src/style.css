@@ -70,12 +70,8 @@
   border: 10px solid transparent;
 }
 
-.choosed {
-  border: 10px #a2fd61 solid;
-}
 
 #main {
-  border: 10px #a2fd61 solid;
   padding: 15px;
 
   display: flex;

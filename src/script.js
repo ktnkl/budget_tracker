@@ -14,8 +14,8 @@
   // budget: all money
 // }
 
-import {tab, category, radio, requireLogIn, loginButton, adminButton} from "./templates.js"
-import {cat} from "./utils.js"
+import {requireLogIn, loginButton, adminButton, dropdownMainEmployees} from "./templates.js"
+
 
 /// Model
 const defaultState = {
@@ -31,8 +31,27 @@ const defaultState = {
 }
 
 let savedState = localStorage.getItem('state')
-
 let state = savedState ? JSON.parse(savedState) : defaultState
+
+let defaultDeals = []
+let savedDeals = localStorage.getItem('deals')
+let deals = savedDeals ? JSON.parse(savedDeals) : defaultDeals
+
+const defaultEmployees = [
+  {
+    f: 'Иванов',
+    i: 'Алексей',
+    o: 'Викторович',
+    birth: '23.02.2003',
+    position: 'кассир'
+  }
+]
+let savedEmployees = localStorage.getItem('employees')
+let employees = savedEmployees ? JSON.parse(savedEmployees) : defaultEmployees
+
+function save(object) {
+  localStorage.setItem(object, JSON.stringify(object))
+}
 
 let resetState = () => {
   state = defaultState
@@ -40,209 +59,44 @@ let resetState = () => {
   location.reload()
 }
 
-// Presenter
-
 let saveState = () => {
   localStorage.setItem('state', JSON.stringify(state))
 }
+// Presenter
 
+// сбор данных из формы
+document.getElementById("submit").addEventListener("click", () => {
+  let $dealNumber = document.getElementById("deal-number")
+  let $employeeName = document.getElementById("employee-name")
+  let $contragent = document.getElementById("contragent")
+  let $description = document.getElementById("description")
+  let $date = document.getElementById("date")
 
-// старый код - начало
-document.getElementById('outcome-chooser').addEventListener('click', () => {
-  renderPage(2)
+  let newDeal = {
+    dealNumber: $dealNumber.value,
+    employeeName: $employeeName.innerHTML,
+    contragent: $contragent.value,
+    description: $description.value,
+    date: $date.value,
+  }
+
+  deals.push(newDeal)
+  localStorage.setItem('deals', JSON.stringify(deals))
+
+  $dealNumber.value = ""
+  $employeeName.innerHTML = "Сотрудник"
+  $contragent.value = ""
+  $description.value = ""
+  $date.value = ""
 })
 
-document.getElementById('income-chooser').addEventListener('click', () => renderPage(1))
 
-function getBudget(state) {
-  let budget = 0
-  for (item of state.categories) {
-    if (item.categoryId == 1) {
-      for (let v = 0; v < item.value.length; v++) {
-        budget += Number(item.value[v])
-      }
-    }
-    else if (item.categoryId == 2) {
-      for (let v = 0; v < item.value.length; v++) {
-        budget -= Number(item.value[v])
-      }
-    }
-  }
 
-  state.budget = budget
-  saveState()
-  renderBudget(state)
-
-  return state.budget
-}
-
-function addCategory(categoryId) {
-  let id = state.categories.length
-
-  const inputId = `add-${cat(categoryId)}-category-name`
-  let $categoryInput = document.getElementById(inputId)
-  let categoryName = $categoryInput.value
-  $categoryInput.value = '' // обнуляем инпут
-
-  const obj = {
-    id,
-    categoryName,
-    categoryId,
-    value: [],
-    date: []
-  }
-
-  state.categories.push(obj)
-
-  renderCategory(categoryId)
-  renderRadio(categoryId)
-  saveState()
-}
-
-function addCategoryValue(categoryId) {
-  const inputId = `add-${cat(categoryId)}-value`
-  const radioName = `${cat(categoryId)}`
-  const $categoryValueInput = document.getElementById(inputId)
-  let value = $categoryValueInput.value
-  $categoryValueInput.value = ''
-
-  let $radios = document.getElementsByName(radioName);
-  let checkedId;
-  for (let i = 0; i < $radios.length; i++) {
-    if ($radios[i].checked) {
-      checkedId = $radios[i].classList[0]
-      break
-    }
-  }
-
-  state.categories[checkedId].value.push(value)
-
-  let date = new Date()
-  state.categories[checkedId].date.push(date)
-  
-  renderCategory(categoryId)
-  renderDiagramm(categoryId)
-  getBudget(state)
-  saveState()
-
-  console.log(state)
-}
-
-function renderPage(categoryId) {
-  const categoryType = `${cat(categoryId)}`
-  const $mainWrapper = document.getElementById("main")
-  $mainWrapper.innerHTML = ""
-  $mainWrapper.insertAdjacentHTML("beforeend", tab(categoryType))
-
-  state.userChoises.categoryId = categoryId
-  saveState()
-
-  document.getElementById(`add-${categoryType}`).addEventListener('click', () => addCategoryValue(categoryId))
-  document.getElementById(`add-${categoryType}-category`).addEventListener('click', () => addCategory(categoryId))
-  document.getElementById(`reset`).addEventListener('click', () => resetState())
-  
-  const catChooser = document.querySelector('.big-category-chooser').children
-  for (let i=0; i < catChooser.length; i ++) {
-    if (catChooser[i].id == `${categoryType}-chooser`) {
-      catChooser[i].classList.add('choosed')
-    } else {
-      if (catChooser[i].classList.contains('choosed')){
-        catChooser[i].classList.remove('choosed')
-      }
-    }
-  }
-  renderRadio(categoryId)
-  renderCategory(categoryId)
-  renderBudget(state)
-  renderDiagramm(categoryId)
-
-}
-
-function renderDiagramm(categoryId) {
-  const labels = state.categories.filter(item => {
-    return item.categoryId == categoryId
-  }).map(item => {
-    return item.categoryName
-  })
-  
-  const series = []
-  for (let i = 0; i < state.categories.length; i++) {
-    if (state.categories[i].categoryId == categoryId) {
-      let sum = 0
-      for (let j = 0; j < state.categories[i].value.length; j++) {
-        sum += Number(state.categories[i].value[j])
-      }
-      series.push(sum)
-    }
-  }
-  
-  const data = {
-    labels,
-    series,
-  };
-
-  const options = {
-    width: 500,
-    height: 300,
-  };
-  
-  const responsiveOptions = [
-    ['screen and (min-width: 640px)', {
-      chartPadding: 30,
-      labelOffset: 100,
-      labelDirection: 'explode',
-      labelInterpolationFnc: function(value) {
-        return value;
-      }
-    }],
-    ['screen and (min-width: 1024px)', {
-      labelOffset: 80,
-      chartPadding: 20
-    }]
-  ];
-  
-  new Chartist.Pie('.ct-chart', data, options, responsiveOptions);
-}
-
-function renderRadio(categoryId) {
-  const radioName = `${cat(categoryId)}`
-  const inputId = `${cat(categoryId)}-radios`
-  const $radios = document.getElementById(inputId)
-  $radios.innerHTML = ''
-  for (let i = 0; i < state.categories.length; i ++) {
-    if (state.categories[i].categoryId == categoryId) {
-      let {id, categoryName} = state.categories[i]
-      $radios.insertAdjacentHTML("beforeend", radio(id, categoryName, radioName))
-  }}
-}
-
-function renderCategory(categoryId) {
-  const radioName = `${cat(categoryId)}`
-  const categoriesListId = `categories-${cat(categoryId)}-list`
-  const $categoriesList = document.getElementById(categoriesListId);
-  $categoriesList.innerHTML = ''
-  
-  for (let i = 0; i < state.categories.length; i ++) {
-    if (state.categories[i].categoryId == categoryId) {
-      let {id, categoryName, value} = state.categories[i]
-      let valueSum = 0
-      for (let j = 0; j < value.length; j ++) {
-        valueSum += Number(value[j])
-      }
-      $categoriesList.insertAdjacentHTML("beforeend", category(id, categoryName, valueSum))
-  }}
-  
-}
-
-function renderBudget(state) {
-  const $budgetValue = document.getElementById("budget-value")
-  $budgetValue.innerHTML = state.budget
-} 
-// старый код - конец
 
 
 //View
-let catId = state.userChoises.categoryId
+let lastActive = null
+
 const $logout = document.getElementById("log-status")
 const $userButton = document.getElementById("user")
 
@@ -259,7 +113,7 @@ if (state.userChoises.userName == "demo") {
   }
   $logout.innerHTML = "Выйти"
   $userButton.innerHTML = state.userChoises.userName
-  renderPage(catId)
+  
 }
 
 
@@ -278,3 +132,21 @@ document.getElementById("admBtn").addEventListener("click", () => {
   window.location.href = "./admin.html"
 })
 
+let $dropdown = document.getElementById('dropdown')
+employees.map(item => {
+  let name = item.f + ' ' + item.i + ' ' + item.o
+  $dropdown.insertAdjacentHTML('beforeend', dropdownMainEmployees(name))
+})
+
+document.getElementById("dropdown").addEventListener("click", (event) => {
+  if (lastActive) {
+    lastActive.classList.remove("active")
+    event.target.classList.add("active")
+    lastActive = event.target
+  } else {
+    lastActive = event.target
+    lastActive.classList.add("active")
+  }
+  
+  document.getElementById("employee-name").innerHTML = lastActive.innerHTML
+})

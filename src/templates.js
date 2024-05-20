@@ -77,4 +77,86 @@ function loginStatus(user) {
   `
 }
 
-export {tab, category, radio, requireLogIn, authError, loginButton, loginStatus, adminButton}
+function dropdownMainEmployees(name) {
+  return `
+    <li class="dropdown-item">${name}</li>
+  `
+}
+
+function trJournal(dealNumber, employeeName, contragent, description, date) {
+  return `
+  <tr>
+    <th scope="col">${dealNumber}</th>
+    <th scope="col">${employeeName}</th>
+    <th scope="col">${contragent}</th>
+    <th scope="col">${description}</th>
+    <th scope="col">${date}</th>
+  </tr>
+  `
+}
+
+function theadAdminEmployees() {
+  return `
+  <table class="table table-bordered table-hover">
+  <thead>
+    <tr>
+      <th scope="col">Фамилия</th>
+      <th scope="col">Имя</th>
+      <th scope="col">Отчество</th>
+      <th scope="col">Дата рождения</th>
+      <th scope="col">Должность</th>
+    </tr>
+  </thead>
+  <tbody id="table">
+
+  </tbody>
+  `
+}
+
+function trAdminEmployees(id, f, i, o, birth, position) {
+  return `
+  <tr id="${id}">
+  <th scope="col">${f}</th>
+  <th scope="col">${i}</th>
+  <th scope="col">${o}</th>
+  <th scope="col">${birth}</th>
+  <th scope="col">${position}</th>
+  </tr>
+  `
+}
+
+function buttonsAdminEmployees() {
+  return `
+  <div class="d-flex flex-row m-1">
+    <button type="button" class="btn btn-primary" id="add">Добавить</button>
+    <button type="button" class="btn btn-secondary" id="change">Изменить</button>
+    <button type="button" class="btn btn-danger" id="delete">Удалить</button>
+    <button type="button" class="btn btn-success" id="save">Сохранить</button>
+  </div>
+  `
+}
+
+function addingEmployeeForm() {
+  return `
+  <tr>
+  <th scope="col"><input type="text" id="f"></th>
+  <th scope="col"><input type="text" id="i"></th>
+  <th scope="col"><input type="text" id="o"></th>
+  <th scope="col"><input type="text" id="birth"></th>
+  <th scope="col"><input type="text" id="position"></th>
+  </tr>
+  `
+}
+
+function addingEmployeeFormOnlyInputs() {
+  return `
+  <th scope="col"><input type="text" id="f"></th>
+  <th scope="col"><input type="text" id="i"></th>
+  <th scope="col"><input type="text" id="o"></th>
+  <th scope="col"><input type="text" id="birth"></th>
+  <th scope="col"><input type="text" id="position"></th>
+  `
+}
+
+
+export {tab, category, radio, requireLogIn, authError, loginButton, loginStatus, adminButton, trJournal, theadAdminEmployees, trAdminEmployees, buttonsAdminEmployees, addingEmployeeForm, addingEmployeeFormOnlyInputs, dropdownMainEmployees}
