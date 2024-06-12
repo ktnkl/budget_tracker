@@ -4,45 +4,6 @@ function adminButton() {
     `
 }
 
-function tab(categoryType) {
-  return `
-    <article id="${categoryType}" class="${categoryType}">
-      <section class="${categoryType}-form" id="${categoryType}-form" name="${categoryType}">
-      <input type="number" id="add-${categoryType}-value">
-      <button class="${categoryType}-form__add" id="add-${categoryType}" >Добавить значение</button>
-      <section class="radios" id="${categoryType}-radios">
-      </section>
-      </section>
-      <input type="text" placeholder="Введите название..." id="add-${categoryType}-category-name">
-      <button class="${categoryType}__add" id="add-${categoryType}-category">Добавить категорию
-      </button>
-      <button class="${categoryType}__reset" id="reset">Сбросить состояние</button>
-      <section class="categories" id="categories-${categoryType}-list">
-      </section>
-    </article>
-
-    <section class="ct-chart" id="diagram">
-    
-    </section>
-    
-  `
-}
-
-function category(id, categoryName, valueSum) {
-  return `
-    <div class="${id} categories-item">
-      <p class="categories-item__key">${categoryName}</p>
-      <p class="categories-item__value">${valueSum}</p>
-    </div>`
-}
-
-function radio(id, categoryName, radioName) {
-  return `
-    <input type="radio" value="${radioName}Radio${id}" name="${radioName}"  class="${id}">
-    <label for="${radioName}Radio${id}">${categoryName}</label>
-  `
-}
-
 function requireLogIn() {
   return `
     <div class="unauth"
@@ -83,13 +44,13 @@ function dropdownMainEmployees(name) {
   `
 }
 
-function trJournal(dealNumber, employeeName, contragent, description, date) {
+function trJournal(dealNumber, employeeName, contragent, sum, date) {
   return `
   <tr>
     <th scope="col">${dealNumber}</th>
     <th scope="col">${employeeName}</th>
     <th scope="col">${contragent}</th>
-    <th scope="col">${description}</th>
+    <th scope="col">${sum}</th>
     <th scope="col">${date}</th>
   </tr>
   `
@@ -105,6 +66,7 @@ function theadAdminEmployees() {
       <th scope="col">Отчество</th>
       <th scope="col">Дата рождения</th>
       <th scope="col">Должность</th>
+      <th scope="col">Оклад</th>
     </tr>
   </thead>
   <tbody id="table">
@@ -113,7 +75,7 @@ function theadAdminEmployees() {
   `
 }
 
-function trAdminEmployees(id, f, i, o, birth, position) {
+function trAdminEmployees(id, f, i, o, birth, position, salary) {
   return `
   <tr id="${id}">
   <th scope="col">${f}</th>
@@ -121,6 +83,7 @@ function trAdminEmployees(id, f, i, o, birth, position) {
   <th scope="col">${o}</th>
   <th scope="col">${birth}</th>
   <th scope="col">${position}</th>
+  <th scope="col">${salary}</th>
   </tr>
   `
 }
@@ -144,6 +107,7 @@ function addingEmployeeForm() {
   <th scope="col"><input type="text" id="o"></th>
   <th scope="col"><input type="text" id="birth"></th>
   <th scope="col"><input type="text" id="position"></th>
+  <th scope="col"><input type="number" id="salary"></th>
   </tr>
   `
 }
@@ -155,8 +119,59 @@ function addingEmployeeFormOnlyInputs() {
   <th scope="col"><input type="text" id="o"></th>
   <th scope="col"><input type="text" id="birth"></th>
   <th scope="col"><input type="text" id="position"></th>
+  <th scope="col"><input type="number" id="salary"></th>
   `
 }
 
+function salaryRules() {
+  return `
+    <table class="table table-bordered table-hover">
+        <thead>
+          <tr>
+            <th scope="col">Cотрудник</th>
+            <th scope="col">Оклад</th>
+            <th scope="col">Премия (фикс.)</th>
+            <th scope="col">Премия (%)</th>
+            <th scope="col">Итого</th>
+          </tr>
+        </thead>
+        <tbody id="table">
 
-export {tab, category, radio, requireLogIn, authError, loginButton, loginStatus, adminButton, trJournal, theadAdminEmployees, trAdminEmployees, buttonsAdminEmployees, addingEmployeeForm, addingEmployeeFormOnlyInputs, dropdownMainEmployees}
+        </tbody>
+      </table>
+  `
+}
+
+function salaryBody(fullName, salary, fix, percent, all) {
+  return `
+    <tr scope="row">
+      <th scope="col">${fullName}<th>
+      <th scope="col">${salary}<th>
+      <th scope="col">${fix}<th>
+      <th scope="col">${percent}<th>
+      <th scope="col">${all}<th>
+    </tr>
+  `
+}
+
+function periodStartTamplate() {
+  return  `
+  <div>Выберите дату начала отчетного периода (длится месяц)</div>
+  <form>
+    <div class="mb-3">
+     <label for="period" class="form-label">Расчетный период</label>
+     <input type="month" class="form-control" id="period" min="1" max="28" placeholder="1-28">
+    </div>
+  </form>
+  <button type="button" class="btn btn-primary" id="addPeriod">Начать</button>
+  `
+}
+
+function  periodEndTemplate(date) {
+  return `
+  <div>Отчетность ведется за  ${date}</div>
+  <button type="button" class="btn btn-primary" id="endPeriod">Закрыть период</button>
+  `
+}
+
+export {requireLogIn, authError, loginButton, loginStatus, adminButton, trJournal, theadAdminEmployees, trAdminEmployees, buttonsAdminEmployees, addingEmployeeForm, addingEmployeeFormOnlyInputs, dropdownMainEmployees, salaryRules, salaryBody, periodStartTamplate, periodEndTemplate}

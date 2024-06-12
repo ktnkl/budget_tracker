@@ -25,7 +25,10 @@ document.getElementById("button").addEventListener('click', () => {
 function checkUser() {
   let login = document.getElementById("login").value
   let password = document.getElementById("password").value
-
+  // fetch('../backend/login', {
+  //   username: login,
+  //   password: password
+  // })}
   for (let user in users) {
     if (login == user) {
       if (password == users[user]) {
@@ -38,6 +41,8 @@ function checkUser() {
     } else {renderError("login")}
   }
 }
+
+
 
 function giveAccess(login) {
   let savedState = localStorage.getItem('state')

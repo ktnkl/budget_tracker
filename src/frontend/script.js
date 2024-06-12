@@ -1,18 +1,3 @@
-// state = {
-//  categories:[
-  //   {id: 0..n 
-  //   name: food,
-  //   type: 1 or 2, 1 - income, 2 - outcome
-  //   value: [12, 2323], при добавлении категории ничего не добавляем
-  //   data: [new Date], так же как и со значением},
-  //   {},
-  //   ]
-  // userChoises: {
-  //   categoryID,
-  //   theme: dark or light,
-  // }
-  // budget: all money
-// }
 
 import {requireLogIn, loginButton, adminButton, dropdownMainEmployees} from "./templates.js"
 
@@ -49,6 +34,8 @@ const defaultEmployees = [
 let savedEmployees = localStorage.getItem('employees')
 let employees = savedEmployees ? JSON.parse(savedEmployees) : defaultEmployees
 
+let reporting = JSON.parse(localStorage.getItem("reporting"))
+
 function save(object) {
   localStorage.setItem(object, JSON.stringify(object))
 }
@@ -65,34 +52,31 @@ let saveState = () => {
 // Presenter
 
 // сбор данных из формы
-document.getElementById("submit").addEventListener("click", () => {
-  let $dealNumber = document.getElementById("deal-number")
-  let $employeeName = document.getElementById("employee-name")
-  let $contragent = document.getElementById("contragent")
-  let $description = document.getElementById("description")
-  let $date = document.getElementById("date")
+document.getElementById("submit").addEventListener("click", (event) => {
+  if (reporting.end == false) {
+    let $dealNumber = document.getElementById("deal-number")
+    let $employeeName = document.getElementById("employee-name")
+    let $contragent = document.getElementById("contragent")
+    let $sum = document.getElementById("sum")
+    let $date = document.getElementById("date")
 
-  let newDeal = {
-    dealNumber: $dealNumber.value,
-    employeeName: $employeeName.innerHTML,
-    contragent: $contragent.value,
-    description: $description.value,
-    date: $date.value,
+    let newDeal = {
+      dealNumber: $dealNumber.value,
+      employeeName: $employeeName.innerHTML,
+      contragent: $contragent.value,
+      sum: $sum.value,
+      date: new Date($date.value),
+    }
+
+    deals.push(newDeal)
+    localStorage.setItem('deals', JSON.stringify(deals))
+
+    window.location.reload()
+  } else {
+    event.target.insertAdjacentHTML("beforebegin", "<div>Отчетный период завершен</div>")
+    console.log("false")
   }
-
-  deals.push(newDeal)
-  localStorage.setItem('deals', JSON.stringify(deals))
-
-  $dealNumber.value = ""
-  $employeeName.innerHTML = "Сотрудник"
-  $contragent.value = ""
-  $description.value = ""
-  $date.value = ""
 })
-
-
-
-
 
 //View
 let lastActive = null
@@ -116,11 +100,6 @@ if (state.userChoises.userName == "demo") {
   
 }
 
-
-// const burger = document.getElementById("burger")
-// burger.addEventListener("click", (event) => {
-//   document.getElementById("burger-menu").classList.toggle("invisible")
-// })
 
 $logout.addEventListener("click", () => {
   state.userChoises.userName = "demo"
@@ -150,3 +129,28 @@ document.getElementById("dropdown").addEventListener("click", (event) => {
   
   document.getElementById("employee-name").innerHTML = lastActive.innerHTML
 })
+
+//автонумерация сделок
+document.getElementById("deal-number").value = deals.length + 1
+
+//ограничение сделок по периоду. придумать
+document.getElementById("date").min = `${reporting.periodStart}-01`
+document.getElementById("date").max = getMaxDate(reporting.periodStart)
+
+function getMaxDate(string) {
+  let month = string.split("-")[1]
+  if (month == "01" || 
+      month == "03" || 
+      month == "05" || 
+      month == "07" || 
+      month == "08" || 
+      month == "10" || 
+      month == "12"
+  ) {
+    return `${string}-31`
+  } if (month == "02") {
+    return `${string}-28`
+  } else {
+    return `${string}-30`
+  }
+}
