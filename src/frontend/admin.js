@@ -1,96 +1,68 @@
-import { theadAdminEmployees, trAdminEmployees, buttonsAdminEmployees, addingEmployeeForm,addingEmployeeFormOnlyInputs, periodStartTamplate, periodEndTemplate } from "./templates.js"
-
-const defaultReporting = {
-  periodStart: 0,
-  end: false,
-}
-let savedReporting = localStorage.getItem("reporting")
-let reporting = savedReporting ? JSON.parse(savedReporting) : defaultReporting
-function saveReporting() {
-  localStorage.setItem("reporting", JSON.stringify(reporting))
-}
-
-const defaultEmployees = [
-  {
-    f: 'Иванов',
-    i: 'Алексей',
-    o: 'Викторович',
-    birth: '23.02.2003',
-    position: 'кассир',
-    salary: 25000,
-  }
-]
-
-let savedEmployees = localStorage.getItem('employees')
-
-let employees = savedEmployees ? JSON.parse(savedEmployees) : defaultEmployees
-
-let state = JSON.parse(localStorage.getItem('state'))
-
-let saveState = () => {
-  localStorage.setItem('state', JSON.stringify(state))
-}
-let saveEmployees = () => {
-  localStorage.setItem('employees', JSON.stringify(employees))
-}
-
+import { theadAdminEmployees, trAdminEmployees, buttonsAdminEmployees, addingEmployeeForm,addingEmployeeFormOnlyInputs, periodStartTamplate, canvas, salaryRules} from "./templates.js"
 const $main = document.getElementById("main")
-
  // хранит ссылку на выбранную строку таблицы сотрудников
 let lastActive = null
 let sidebarChoosen = document.getElementById("employees")
-
-
 const $userButton = document.getElementById("user")
 $userButton.innerHTML = state.userChoises.userName
-
-
 function renderEmployeesWindow() {
   $main.innerHTML = ""
   $main.insertAdjacentHTML('afterbegin', theadAdminEmployees())
   $main.insertAdjacentHTML('beforeend', buttonsAdminEmployees())
-
-  employees.map((item, index) => {
-    let {f, i, o, birth, position, salary} = item
-    let id = index
-    document.getElementById("table").insertAdjacentHTML('beforeend', trAdminEmployees(id, f, i, o, birth, position, salary))
-
-  })
+  //получение списка сотрудников и 
+  fetch('~/src/backend/sotrudnik').then((response) => {
+    if (!response.ok) {
+      throw new Error('error')
+    }
+    const allEmployees = response.json()
+    for (let i = 0; i < allEmployees.length; i ++) {
+      let {f, i, o, birth, position, salary} = allEmployees[i]
+      document.getElementById("table").insertAdjacentHTML('beforeend', trAdminEmployees(f, i, o, birth, position, salary))
+    }})
+  }
+function renderZPWindow() {
+  $main.innerHTML = ''
+  $main.insertAdjacentElement("afterbegin", salaryRules)
+  percent = document.getElementById("percent").value
+  document.getElementById("done").addEventListener('click')
+  fetch('/zp', {method: 'post', body: JSON.stringify(percent)})
 }
 
+
+//загружает окно отчетов
 function renderReportingWindow() {
-  if (reporting.periodStart == 0){
-    $main.innerHTML = ""
-    $main.insertAdjacentHTML("afterbegin", periodStartTamplate())
-    
-    try {
-      let addPeriod = document.getElementById("addPeriod")
-      addPeriod.addEventListener("click", () => {
-        reporting.periodStart = document.getElementById("period").value
-        saveReporting()
-        window.location.reload()
-    })
-  } catch(err) {
-    console.log(err)
-  }
-  } else {
-    $main.innerHTML = periodEndTemplate(reporting.periodStart)
-    document.getElementById("endPeriod").addEventListener("click", () => {
-      reporting.end = true
-      saveReporting()
-    }) 
-    
-  }
-}
-
-function renderDealsWindow() {
+  let dataObject 
+  let reportType
   $main.innerHTML = ""
-  $main.innerHTML = "deals"
-}
+  $main.insertAdjacentHTML("afterbegin", periodStartTamplate())
+  let addPeriod = document.getElementById("addPeriod")
+  addPeriod.addEventListener("click", () => {
+  period = document.getElementById("period").value
+  })
+  document.getElementById("type").addEventListener("click", (event) => {
+    if (event.target.id == "obschiy") {
+      fetch('~/src/backend/obschiy').then((response) => {
+        reportType = 'line'
+        dataObject =  response
+      })
+    }
+    if (event.target.id == "poCategoriam") {
+      fetch('~/src/backend/cat').then((response) => {
+        reportType = 'line'
+        dataObject =  response
+      })
+    }
+    if (event.target.id == "eff") {
+      fetch('~/src/backend/eff').then((response) => {
+        reportType = 'bar'
+        dataObject =  response
+      })
+    }
+  })
+  $main.insertAdjacentHTML("beforeend", canvas())
 
+  }
 renderEmployeesWindow() 
-
-
 //функционал сайдбара
 document.getElementById("sidebar").addEventListener("click", (event) => {
   sidebarChoosen.classList.remove("active")
@@ -99,7 +71,7 @@ document.getElementById("sidebar").addEventListener("click", (event) => {
 })
 document.getElementById("employees").addEventListener("click", renderEmployeesWindow)
 document.getElementById("reporting").addEventListener("click", renderReportingWindow)
-document.getElementById("deals").addEventListener("click", renderDealsWindow)
+document.getElementById("zp").addEventListener("click", renderZPWindow)
 
 //подсветка выбранной стоки таблицы, переменная хранит
 //ссылку на последнюю нажатую строку, чтобы не проверять всю табл.
@@ -112,36 +84,41 @@ document.getElementById("table").addEventListener("click", (event) => {
     lastActive = event.target.parentNode
     lastActive.classList.add("table-active")
   }
-  
 })
-
 //функционал кнопок вкладки сотрудники
 document.getElementById("save").addEventListener("click", () => {
   let f = document.getElementById("f").value
   let i = document.getElementById("i").value
   let o = document.getElementById("o").value
   let birth = document.getElementById("birth").value
+  let telefon = document.getElementById("telefon").value
+  let obr = document.getElementById("obr").value
   let position = document.getElementById("position").value
   let salary = document.getElementById("salary").value
-
   let newEmployee = {
     f,
     i,
     o,
     birth,
+    telefon,
+    obr,
     position,
     salary
   }
   let selectedRow = document.getElementById('f').parentNode.parentNode.id
   if (selectedRow == '') {
     employees.push(newEmployee)
+    fetch('/sotrudnik', {
+      method: 'post',
+      body: JSON.stringify(newEmployee)
+    })
   } else {
-    employees.splice(selectedRow, 1, newEmployee)
+    fetch('/sotrudnik', {
+      method: 'put',
+      body: JSON.stringify(newEmployee)
+    })
   }
-  saveEmployees()
-  window.location.reload()
 })
-
 document.getElementById("add").addEventListener("click", () => {
   document.getElementById("table").insertAdjacentHTML("beforeend", addingEmployeeForm())
 })
